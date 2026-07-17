@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import errorHandler from './middlewares/error.middleware.js';
-import ejemploRouter from './routes/ejemplo.js'; 
+import ejemploRouter from './routes/auth.routes.js'; 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
