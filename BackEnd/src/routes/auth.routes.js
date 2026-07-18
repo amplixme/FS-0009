@@ -13,6 +13,5 @@ const prisma = new PrismaClient({ adapter });
 const router = Router();
 
 router.post('/auth/register', validate(registerSchema),register) //crea el usuario
-router.get('/',getUser) //Consulta los usuarios de la BD
 
 export default router;
