@@ -1,0 +1,24 @@
+import { registerUser, getUsers } from '../services/auth.service.js';
+
+export const register = async (req, res, next) => {
+    try {
+        await registerUser(req.body);
+
+        return res.status(201).json({
+            message: 'Usuario registrado exitosamente'
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getUser = async (req, res, next) => {
+    try {
+        const users = await getUsers();
+        return res.status(200).json({
+            user: users
+        });
+    } catch (error) {
+        next(error);
+    }
+}
