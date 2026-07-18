@@ -21,8 +21,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Solo redirigir si no estamos ya en login o register
+      const publicRoutes = ['/login', '/register'];
+      if (!publicRoutes.includes(window.location.pathname)) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
