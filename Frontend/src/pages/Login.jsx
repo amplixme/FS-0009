@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import api from '../services/api';
+import { useAuth } from '../context/useAuth';
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();
 
 
   const successMessage = location.state?.successMessage;
@@ -61,12 +63,11 @@ const Login = () => {
         password: formData.password,
       });
 
-      // Login exitoso, guarda el token y los datos del usuario
+      // Login exitoso: usa login() del AuthContext, que guarda en localStorage y actualiza el estado de toda la app
       const { token, user } = response.data;
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      login(token, user);
 
-      // Redirige a la home page
+      // redirige a la home page
       navigate('/');
     } catch (error) {
       const message = error.response?.data?.error?.message || 'Credenciales inválidas. Intentá de nuevo.';

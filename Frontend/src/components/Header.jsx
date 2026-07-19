@@ -1,23 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/useAuth';
 
-const Header = ({ role, onMenuToggle }) => {
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const stored = localStorage.getItem('user');
-        if (stored) {
-            try { setUser(JSON.parse(stored)); } catch { /* ignore */ }
-        }
-    }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
-        navigate('/');
-    };
+const Header = ({ onMenuToggle }) => {
+    const { user, isAuthenticated, logout } = useAuth();
 
     return (
         <>
@@ -33,7 +18,7 @@ const Header = ({ role, onMenuToggle }) => {
                             <Link to="/" className="text-blue-700 dark:text-blue-400 font-bold border-b-2 border-blue-700 dark:border-blue-400 pb-1 font-inter tracking-tight">Latest</Link>
                             <a href="#" className="text-slate-600 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200 font-inter tracking-tight">Popular</a>
                             <a href="#" className="text-slate-600 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200 font-inter tracking-tight">Newsletter</a>
-                            {role === 'admin' && (
+                            {user?.role === 'admin' && (
                                 <Link to="/admin" className="text-slate-600 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200 font-inter tracking-tight">Admin</Link>
                             )}
                         </nav>
@@ -41,16 +26,17 @@ const Header = ({ role, onMenuToggle }) => {
 
 
                     <div className="flex items-center gap-4">
-                        {user ? (
+                        {isAuthenticated ? (
                             <>
-                                <span className="hidden md:block text-sm font-semibold text-on-surface">
-                                    {user.name}
+                                <span className="hidden md:block text-sm font-medium text-slate-700 dark:text-slate-300">
+                                    Hola, {user.name}
                                 </span>
                                 <button
-                                    onClick={handleLogout}
+                                    type="button"
+                                    onClick={logout}
                                     className="hidden md:block px-5 py-2 text-slate-600 font-medium hover:bg-slate-50 transition-colors duration-200 rounded-full"
                                 >
-                                    Log Out
+                                    Cerrar sesión
                                 </button>
                             </>
                         ) : (
