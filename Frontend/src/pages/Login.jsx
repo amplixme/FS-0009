@@ -70,7 +70,7 @@ const Login = () => {
       // redirige a la home page
       navigate('/');
     } catch (error) {
-      const message = error.response?.data?.message || 'Credenciales inválidas. Intentá de nuevo.';
+      const message = error.response?.data?.error?.message || 'Credenciales inválidas. Intentá de nuevo.';
       setServerError(message);
     } finally {
       setLoading(false);

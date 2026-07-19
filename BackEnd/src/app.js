@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import errorHandler from './middlewares/error.middleware.js';
-import ejemploRouter from './routes/ejemplo.js'; 
+import router from './routes/index.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,8 +9,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// ruta de ejemplo (temporal)
-app.use('/api', ejemploRouter); 
+app.use('/api', router); 
 
 
 app.use(errorHandler);

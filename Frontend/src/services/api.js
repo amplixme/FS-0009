@@ -21,8 +21,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-       if (error.response && error.response.status === 401) {
-      triggerLogout();
+    if (error.response && error.response.status === 401) {
+      const publicRoutes = ['/login', '/register'];
+      if (!publicRoutes.includes(window.location.pathname)) {
+        triggerLogout();
+      }
     }
     return Promise.reject(error);
   }
