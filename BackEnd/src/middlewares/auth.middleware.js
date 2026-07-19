@@ -17,8 +17,10 @@ const authMiddleware = (req, res, next) => {
     try {
         const userVerify = jwt.verify(token, process.env.JWT_SECRET);
 
+        // NOTA: el JWT se firma con "userId" (no "id"), ver auth.service.js
+        // userVerify.id daria undefined — usamos userVerify.userId
         req.user = {
-            id: userVerify.id,
+            id: userVerify.userId,
             email: userVerify.email,
             name: userVerify.name,
             role: userVerify.role
