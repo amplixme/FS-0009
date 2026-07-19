@@ -21,6 +21,7 @@ export const registerUser = async (userData) => {
             data: {
                 ...userData,
                 password: hashedPassword,
+                role: 'USER'
             },
         });
         return newUser;
@@ -33,12 +34,6 @@ export const registerUser = async (userData) => {
         throw error;
     }
 };
-
-
-export const getUsers = async () => {
-    const users = await prisma.user.findMany();
-    return users;
-}
 
 export const loginUser = async ({ email, password }) => {
     const user = await prisma.user.findUnique({
@@ -63,7 +58,8 @@ export const loginUser = async ({ email, password }) => {
         {
             userId: user.id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            role: user.role
         },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
