@@ -1,6 +1,7 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client.js";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -37,4 +38,43 @@ export const registerUser = async (userData) => {
 export const getUsers = async () => {
     const users = await prisma.user.findMany();
     return users;
+}
+
+export const loginUser = async ({ email, password }) => {
+    const user = await prisma.user.findUnique({
+        where: { email }
+    });
+
+    if (!user) {
+        const error = new Error('Credenciales inválidas');
+        error.status = 401;
+        throw error;
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+        const error = new Error('Credenciales inválidas');
+        error.status = 401;
+        throw error;
+    }
+
+    const token = jwt.sign(
+        {
+            userId: user.id,
+            email: user.email,
+            name: user.name
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+    );
+
+    return {
+        token,
+        user: {
+            id: user.id,
+            email: user.email,
+            name: user.name
+        }
+    };
 }

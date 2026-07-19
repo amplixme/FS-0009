@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = ({ role, onMenuToggle }) => {
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const stored = localStorage.getItem('user');
+        if (stored) {
+            try { setUser(JSON.parse(stored)); } catch { /* ignore */ }
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+        navigate('/');
+    };
 
     return (
         <>
@@ -24,18 +41,34 @@ const Header = ({ role, onMenuToggle }) => {
 
 
                     <div className="flex items-center gap-4">
-                        <Link
-                            to="/login"
-                            className="hidden md:block px-5 py-2 text-slate-600 font-medium hover:bg-slate-50 transition-colors duration-200 rounded-full"
-                        >
-                            Log In
-                        </Link>
-                        <Link
-                            to="/register"
-                            className="hidden md:block px-6 py-2 bg-primary text-on-primary font-bold rounded-full hover:shadow-lg transition-transform active:scale-95 duration-200"
-                        >
-                            Register
-                        </Link>
+                        {user ? (
+                            <>
+                                <span className="hidden md:block text-sm font-semibold text-on-surface">
+                                    {user.name}
+                                </span>
+                                <button
+                                    onClick={handleLogout}
+                                    className="hidden md:block px-5 py-2 text-slate-600 font-medium hover:bg-slate-50 transition-colors duration-200 rounded-full"
+                                >
+                                    Log Out
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link
+                                    to="/login"
+                                    className="hidden md:block px-5 py-2 text-slate-600 font-medium hover:bg-slate-50 transition-colors duration-200 rounded-full"
+                                >
+                                    Log In
+                                </Link>
+                                <Link
+                                    to="/register"
+                                    className="hidden md:block px-6 py-2 bg-primary text-on-primary font-bold rounded-full hover:shadow-lg transition-transform active:scale-95 duration-200"
+                                >
+                                    Register
+                                </Link>
+                            </>
+                        )}
 
                         {/* dispara el menú (MenuMobile) al hacer click */}
                         <button
