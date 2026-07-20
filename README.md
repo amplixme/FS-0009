@@ -3,11 +3,11 @@ Blog completo con comentarios. Node.js + Express + Prisma + PostgreSQL | Vite + 
 
 # Tecnologías utilizadas en este proyecto (Tech Stack)
 
-|Component|Tech Stack|
-| --- | --- |
-| Backend | Node.js + Express + JWT Auth|
-| ORM | Prisma + PostgreSQL |
-| Frontend | Node.js + Express |
+| Componente | Tecnologías |
+| :--- | :--- |
+| **Backend** | Node.js + Express + JWT Auth |
+| **ORM / Database** | Prisma + PostgreSQL |
+| **Frontend** | Node.js + Express |
 
 <h3> Instrucciones de instalación del proyecto: </h3>
 
