@@ -2,6 +2,9 @@
 Blog completo con comentarios. Node.js + Express + Prisma + PostgreSQL | Vite + React (JS) | JWT auth.
 
 # Tecnologías utilizadas en este proyecto (Tech Stack)
+
+|Component|Tech Stack|
+| --- | --- |
 | Backend | Node.js + Express + JWT Auth|
 | ORM | Prisma + PostgreSQL |
 | Frontend | Node.js + Express |
