@@ -57,9 +57,10 @@ npx prisma studio
 
 # Frontend
 
-1. Ingresar a la carpeta con el siguiente comando:
+1. Ingresar a la carpeta e Instalar las dependencias:
 ```bash
 cd Frontend
+npm install
 ```
 
 2. Configurar un archivo .env con la siguiente variable de entorno. Ahí debe ir la BASE_URL del backend:
