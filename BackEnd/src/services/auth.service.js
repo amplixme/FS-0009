@@ -54,6 +54,8 @@ export const loginUser = async ({ email, password }) => {
         throw error;
     }
 
+    console.log("CLAVE JWT LEÍDA:", process.env.JWT_SECRET);
+    
     const token = jwt.sign(
         {
             userId: user.id,
