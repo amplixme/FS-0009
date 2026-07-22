@@ -8,10 +8,8 @@ export const create = async (req, res, next) => {
 
     const newPost = await createPostService({ title, content, authorId });
 
-    return res.status(201).json({
-      status: 'success',
-      data: newPost,
-    });
+  return res.status(201).json(newPost);
+  
   } catch (error) {
     next(error);
   }
