@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
+import { create } from "../services/post.service";
 
 
 
@@ -43,8 +43,7 @@ export default function Post() {
         return;
       }
 
-      console.log(isPublished);
-      const response = await api.post('/posts', {
+      const response = await create({
         'title': formData.title,
         'content': formData.content,
         'published': isPublished
@@ -52,7 +51,7 @@ export default function Post() {
 
       console.log(response);
 
-      navigate(`/posts/${response.data.id}`, {
+      navigate(`/posts/${response.id}`, {
         state: { successMessage: 'Post creado con éxito' },
       });
 
