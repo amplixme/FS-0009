@@ -33,7 +33,7 @@ const MenuMobile = ({ isOpen, onClose, role, userName = 'Alex Rivera', userEmail
             <span className="font-medium">Inicio</span>
           </Link>
           
-          <Link to="/write" onClick={onClose} className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold rounded-lg px-4 py-3 flex items-center gap-4">
+          <Link to="/post" onClick={onClose} className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold rounded-lg px-4 py-3 flex items-center gap-4">
             <span className="material-symbols-outlined">edit</span>
             <span>Escribir artículo</span>
           </Link>
