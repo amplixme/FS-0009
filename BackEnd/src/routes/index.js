@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import authRouter from './auth.routes.js';
+import postRoutes from './post.routes.js';
+
 
 const router = Router();
 
@@ -10,6 +12,7 @@ router.get('/health', (req, res) => {
 
 // Registrar rutas de auth
 router.use('/auth', authRouter);
+router.use('/posts', postRoutes);
 
 // ──────────────────────────────────────────────
 //  Cómo agregar una nueva ruta:
