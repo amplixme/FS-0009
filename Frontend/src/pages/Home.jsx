@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getAll } from '../services/post.service';
 import PostCard from '../components/PostCard';
+// Componentes comunes extraidos para reutilizar en PostDetail, busquedas, etc.
+import Spinner from '../components/common/Spinner';
+import ErrorMessage from '../components/common/ErrorMessage';
+import EmptyState from '../components/common/EmptyState';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -94,22 +98,22 @@ const Home = () => {
         </aside>
         {/* Main Content Grid */}
         <div className="flex-1">
-          {loading && (
-            <div className="flex justify-center items-center py-24">
-              <p className="text-on-surface-variant">Cargando publicaciones...</p>
-            </div>
-          )}
+          {/* Estos 3 estados (loading/error/vacio) antes eran divs inline. 
+              Se reemplazaron por componentes comunes para consistencia visual 
+              y reutilizarlos en PostDetail, busquedas, etc. */}
+          {loading && <Spinner size="lg" text="Cargando publicaciones..." />}
 
           {!loading && error && (
-            <div className="flex justify-center items-center py-24">
-              <p className="text-error">{error}</p>
-            </div>
+            <ErrorMessage message={error} onRetry={() => window.location.reload()} />
           )}
 
           {!loading && !error && posts.length === 0 && (
-            <div className="flex justify-center items-center py-24">
-              <p className="text-on-surface-variant">Todavía no hay publicaciones.</p>
-            </div>
+            <EmptyState
+              icon="article"
+              message="Todavía no hay publicaciones."
+              actionLabel="Crear primera publicación"
+              onAction={() => window.location.href = '/post'}
+            />
           )}
 
           {!loading && !error && posts.length > 0 && (
