@@ -4,7 +4,7 @@
  * y botones Editar/Eliminar solo si el usuario es el autor.
  */
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getById } from '../services/post.service';
 import { useAuth } from '../context/useAuth';
 import Spinner from '../components/common/Spinner';
@@ -22,6 +22,7 @@ const formatDate = (dateString) => {
 
 const PostDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -58,7 +59,7 @@ const PostDetail = () => {
         icon="article"
         message="Post no encontrado"
         actionLabel="Volver a inicio"
-        onAction={() => window.location.href = '/'}
+        onAction={() => navigate('/')}
       />
     );
   }
