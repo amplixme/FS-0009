@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAll } from '../services/post.service';
 import PostCard from '../components/PostCard';
 // Componentes comunes extraidos para reutilizar en PostDetail, busquedas, etc.
@@ -7,6 +8,7 @@ import ErrorMessage from '../components/common/ErrorMessage';
 import EmptyState from '../components/common/EmptyState';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -104,7 +106,7 @@ const Home = () => {
           {loading && <Spinner size="lg" text="Cargando publicaciones..." />}
 
           {!loading && error && (
-            <ErrorMessage message={error} onRetry={() => window.location.reload()} />
+            <ErrorMessage message={error} onRetry={() => { setError(null); setLoading(true); }} />
           )}
 
           {!loading && !error && posts.length === 0 && (
@@ -112,7 +114,7 @@ const Home = () => {
               icon="article"
               message="Todavía no hay publicaciones."
               actionLabel="Crear primera publicación"
-              onAction={() => window.location.href = '/post'}
+              onAction={() => navigate('/post')}
             />
           )}
 
