@@ -60,7 +60,7 @@ export default function Post() {
       console.error("Error al guardar el artículo:", error);
       setErrors((prev) => ({
         ...prev,
-        server: error.response?.data?.message || "Ocurrió un error al guardar el artículo."
+        server: error.message || "Ocurrió un error al guardar el artículo."
       }));
     } finally {
       setIsSaving(false);
