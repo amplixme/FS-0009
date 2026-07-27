@@ -35,6 +35,9 @@ export const createPostService = async ({ title, content, authorId }) => {
 // obtener todos los post
 export const getAllPostsService = async () => {
   const posts = await prisma.post.findMany({
+    where: {
+      published: true,
+    },
     orderBy: {
       createdAt: 'desc',
     },
