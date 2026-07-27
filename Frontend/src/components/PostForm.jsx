@@ -3,21 +3,24 @@
  * Recibe datos iniciales y callback onSubmit.
  */
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PostForm = ({
-  initialData = { title: '', content: '', published: false },
+  initialData = null,
   onSubmit,
   isLoading = false,
   submitLabel = 'Guardar artículo',
+  serverError = null,
+  onDiscard,
 }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    title: initialData.title || '',
-    content: initialData.content || '',
-    published: initialData.published || false,
+    title: initialData?.title || '',
+    content: initialData?.content || '',
+    published: initialData?.published || false,
   });
   const [errors, setErrors] = useState({});
 
-  // Actualizar form cuando cambien los datos iniciales (para edición)
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -50,6 +53,8 @@ const PostForm = ({
     await onSubmit(formData);
   };
 
+  const handleDiscard = onDiscard || (() => navigate(-1));
+
   return (
     <div className="bg-surface text-on-surface antialiased min-h-screen">
       {/* TopNavBar */}
@@ -67,6 +72,12 @@ const PostForm = ({
       </header>
 
       <form onSubmit={handleSubmit} className="pt-32 pb-40 px-6 max-w-[800px] mx-auto">
+        {serverError && (
+          <div className="mb-6 p-4 rounded-xl bg-error-container/30 border border-error/20">
+            <p className="text-error text-sm font-semibold">{serverError}</p>
+          </div>
+        )}
+
         {/* Article Title */}
         <section className="mb-8">
           <input
@@ -138,7 +149,7 @@ const PostForm = ({
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <button type="button" className="text-[10px] uppercase tracking-widest font-bold text-error hover:text-error/80 transition-all duration-200 ease-in-out">
+            <button type="button" onClick={handleDiscard} className="text-[10px] uppercase tracking-widest font-bold text-error hover:text-error/80 transition-all duration-200 ease-in-out">
               Descartar
             </button>
             <div className="h-4 w-px bg-outline-variant/20"></div>

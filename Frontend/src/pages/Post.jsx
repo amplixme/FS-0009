@@ -10,15 +10,16 @@ import PostForm from "../components/PostForm";
 export default function Post() {
   const navigate = useNavigate();
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (formData) => {
     try {
       setIsSaving(true);
+      setError(null);
       const response = await create(formData);
       navigate(`/posts/${response.id}`);
-    } catch (error) {
-      console.error("Error al guardar el artículo:", error);
-      throw error;
+    } catch (err) {
+      setError(err.message || 'Error al guardar el artículo');
     } finally {
       setIsSaving(false);
     }
@@ -29,6 +30,7 @@ export default function Post() {
       onSubmit={handleSubmit}
       isLoading={isSaving}
       submitLabel="Guardar artículo"
+      serverError={error}
     />
   );
 }
