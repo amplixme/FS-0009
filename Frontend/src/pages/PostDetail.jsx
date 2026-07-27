@@ -5,11 +5,13 @@
  */
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getById } from '../services/post.service';
+import { getById, deletePost } from '../services/post.service';
 import { useAuth } from '../context/useAuth';
 import Spinner from '../components/common/Spinner';
 import ErrorMessage from '../components/common/ErrorMessage';
 import EmptyState from '../components/common/EmptyState';
+import ConfirmModal from '../components/common/ConfirmModal';
+import Toast from '../components/common/Toast';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -27,6 +29,9 @@ const PostDetail = () => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -66,6 +71,20 @@ const PostDetail = () => {
 
   const authorName = post.author?.name || 'Autor desconocido';
   const isAuthor = user && user.id === post.authorId;
+
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await deletePost(id);
+      setShowDeleteModal(false);
+      navigate('/', { state: { successMessage: 'Post eliminado correctamente' } });
+    } catch (err) {
+      setShowDeleteModal(false);
+      setToast({ visible: true, message: err.message || 'Error al eliminar el post', type: 'error' });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className="pb-20 px-4 md:px-6 max-w-7xl mx-auto">
@@ -122,6 +141,7 @@ const PostDetail = () => {
                 Editar
               </Link>
               <button
+                onClick={() => setShowDeleteModal(true)}
                 className="flex items-center gap-2 px-5 py-2 rounded-full border border-error text-error hover:bg-error-container transition-all text-sm font-semibold"
               >
                 <span className="material-symbols-outlined text-[20px]">delete</span>
@@ -164,6 +184,24 @@ const PostDetail = () => {
           </div>
         </aside>
       </div>
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        title="Eliminar publicación"
+        message="¿Estás seguro de que deseas eliminar esta publicación? Esta acción no se puede deshacer."
+        confirmLabel={isDeleting ? 'Eliminando...' : 'Eliminar'}
+        cancelLabel="Cancelar"
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteModal(false)}
+        danger
+      />
+
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.visible}
+        onClose={() => setToast({ ...toast, visible: false })}
+      />
     </div>
   );
 };
