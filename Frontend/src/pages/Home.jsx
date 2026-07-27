@@ -1,17 +1,24 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getAll } from '../services/post.service';
 import PostCard from '../components/PostCard';
 // Componentes comunes extraidos para reutilizar en PostDetail, busquedas, etc.
 import Spinner from '../components/common/Spinner';
 import ErrorMessage from '../components/common/ErrorMessage';
 import EmptyState from '../components/common/EmptyState';
+import Toast from '../components/common/Toast';
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [toast, setToast] = useState({
+    visible: !!location.state?.successMessage,
+    message: location.state?.successMessage || '',
+    type: 'success',
+  });
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -141,6 +148,13 @@ const Home = () => {
           </nav>
         </div>
       </div>
+
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.visible}
+        onClose={() => setToast({ ...toast, visible: false })}
+      />
     </div>
   );
 };
