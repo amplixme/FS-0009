@@ -5,11 +5,12 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 // Crear post
-export const createPostService = async ({ title, content, coverImage, authorId }) => {
+export const createPostService = async ({ title, content, coverImage, authorId, published}) => {
   const newPost = await prisma.post.create({
     data: {
       title,
       content,
+      published,
       coverImage,
       authorId,
     },
@@ -85,10 +86,10 @@ export const getPostByIdService = async (id) => {
 };
 
 // Actualizar post
-export const updatePostService = async (id, { title, content, coverImage }) => { 
+export const updatePostService = async (id, { title, content, coverImage, published }) => { 
   const updatedPost = await prisma.post.update({
     where: { id: Number(id) },
-    data: { title, content, coverImage },
+    data: { title, content, coverImage, published },
     select: {
       id: true,
       title: true,
