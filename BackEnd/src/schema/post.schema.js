@@ -15,6 +15,10 @@ export const createPostSchema = z.object({
     .string()
     .url("URL de imagen inválida")
     .optional(),
+    
+  published: z
+    .boolean()
+    .optional()
 });
 
 export const updatePostSchema = z.object({
@@ -34,4 +38,8 @@ export const updatePostSchema = z.object({
     .string()
     .url('URL de imagen inválida')
     .optional(),
+
+  published: z
+    .boolean()
+    .optional()
 });
