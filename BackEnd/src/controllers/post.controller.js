@@ -8,11 +8,11 @@ import {
 
 export const create = async (req, res, next) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, coverImage } = req.body;
     
     const authorId = req.user.id; 
 
-    const newPost = await createPostService({ title, content, authorId });
+    const newPost = await createPostService({ title, content, coverImage, authorId });
 
   return res.status(201).json(newPost);
 
@@ -48,7 +48,7 @@ export const getById = async (req, res, next) => {
 export const update = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, content } = req.body;
+    const { title, content, coverImage} = req.body;
 
     // 1. Verificar si el post existe
     const post = await getPostByIdService(id);
@@ -66,7 +66,7 @@ export const update = async (req, res, next) => {
       });
     }
 
-    const updatedPost = await updatePostService(id, { title, content });
+    const updatedPost = await updatePostService(id, { title, content, coverImage});
     return res.status(200).json(updatedPost);
   } catch (error) {
     next(error);

@@ -5,17 +5,19 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 // Crear post
-export const createPostService = async ({ title, content, authorId }) => {
+export const createPostService = async ({ title, content, coverImage, authorId }) => {
   const newPost = await prisma.post.create({
     data: {
       title,
       content,
+      coverImage,
       authorId,
     },
     select: {
       id: true,
       title: true,
       content: true,
+      coverImage: true,
       published: true,
       createdAt: true,
       updatedAt: true,
@@ -27,12 +29,10 @@ export const createPostService = async ({ title, content, authorId }) => {
     },
   });
 
-  
-
   return newPost;
 };
 
-// obtener todos los post
+// Obtener todos los post
 export const getAllPostsService = async () => {
   const posts = await prisma.post.findMany({
     where: {
@@ -45,6 +45,7 @@ export const getAllPostsService = async () => {
       id: true,
       title: true,
       content: true,
+      coverImage: true,
       published: true,
       createdAt: true,
       updatedAt: true,
@@ -67,6 +68,7 @@ export const getPostByIdService = async (id) => {
       id: true,
       title: true,
       content: true,
+      coverImage: true,
       published: true,
       createdAt: true,
       updatedAt: true,
@@ -83,14 +85,15 @@ export const getPostByIdService = async (id) => {
 };
 
 // Actualizar post
-export const updatePostService = async (id, { title, content }) => {
+export const updatePostService = async (id, { title, content, coverImage }) => { 
   const updatedPost = await prisma.post.update({
     where: { id: Number(id) },
-    data: { title, content },
+    data: { title, content, coverImage },
     select: {
       id: true,
       title: true,
       content: true,
+      coverImage: true,
       published: true,
       createdAt: true,
       updatedAt: true,

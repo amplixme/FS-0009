@@ -33,6 +33,7 @@ model Post{
   id Int @id @default(autoincrement())
   title String
   content String
+  coverImage  String?
   published Boolean @default(false)
   authorId Int
   createdAt DateTime @default(now())
