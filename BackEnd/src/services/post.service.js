@@ -33,12 +33,22 @@ export const createPostService = async ({ title, content, coverImage, authorId, 
   return newPost;
 };
 
-// Obtener todos los post
-export const getAllPostsService = async () => {
+// Obtener todos los post (con filtro opcional por slug de categoría)
+export const getAllPostsService = async (categorySlug) => {
+  const where = {
+    published: true,
+  };
+
+  if (categorySlug) {
+    where.categories = {
+      some: {
+        slug: categorySlug,
+      },
+    };
+  }
+
   const posts = await prisma.post.findMany({
-    where: {
-      published: true,
-    },
+    where,
     orderBy: {
       createdAt: 'desc',
     },
@@ -53,6 +63,13 @@ export const getAllPostsService = async () => {
       author: {
         select: {
           name: true,
+        },
+      },
+      categories: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
         },
       },
     },
@@ -79,6 +96,13 @@ export const getPostByIdService = async (id) => {
           name: true,
         },
       },
+      categories: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
     },
   });
 
@@ -101,6 +125,13 @@ export const updatePostService = async (id, { title, content, coverImage, publis
       author: {
         select: {
           name: true,
+        },
+      },
+      categories: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
         },
       },
     },
