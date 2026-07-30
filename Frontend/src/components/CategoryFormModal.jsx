@@ -1,0 +1,107 @@
+import { useState } from 'react';
+
+const generateSlug = (text) => {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // saca tildes
+    .replace(/[^a-z0-9\s-]/g, '') // saca caracteres no permitidos
+    .trim()
+    .replace(/\s+/g, '-') // espacios -> guiones
+    .replace(/-+/g, '-'); // colapsa guiones repetidos
+};
+
+const CategoryFormModal = ({ isOpen, mode, initialData, onClose, onSubmit, isSaving, serverError }) => {
+  const [name, setName] = useState(() => initialData?.name || '');
+  const [slug, setSlug] = useState(() => initialData?.slug || '');
+  const [slugEditedManually, setSlugEditedManually] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setName(value);
+    if (!slugEditedManually) {
+      setSlug(generateSlug(value));
+    }
+  };
+
+  const handleSlugChange = (e) => {
+    setSlug(e.target.value);
+    setSlugEditedManually(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit({ name: name.trim(), slug: slug.trim() });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-surface-container-lowest rounded-2xl shadow-xl w-full max-w-md p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-on-surface">
+            {mode === 'edit' ? 'Editar categoría' : 'Crear nueva categoría'}
+          </h2>
+          <button onClick={onClose} className="text-outline hover:text-on-surface">
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-xs font-semibold uppercase tracking-wide text-outline mb-2">
+              Nombre
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              placeholder="Ej. Tecnología"
+              className="w-full px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary/20 outline-none"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-xs font-semibold uppercase tracking-wide text-outline mb-2">
+              Slug
+            </label>
+            <input
+              type="text"
+              value={slug}
+              onChange={handleSlugChange}
+              placeholder="tecnologia"
+              className="w-full px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary/20 outline-none"
+              required
+            />
+            <p className="text-xs text-outline mt-1">Solo minúsculas, números y guiones.</p>
+          </div>
+
+          {serverError && (
+            <p className="text-error text-sm font-semibold mb-4">{serverError}</p>
+          )}
+
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-5 py-2 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-surface-container-low transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="px-5 py-2 rounded-full bg-primary text-on-primary font-semibold hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSaving ? 'Guardando...' : mode === 'edit' ? 'Guardar cambios' : 'Crear categoría'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default CategoryFormModal;
