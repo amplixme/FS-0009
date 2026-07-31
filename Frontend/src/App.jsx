@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Post from "./pages/Post";
 import PostDetail from "./pages/PostDetail";
 import EditPost from "./pages/EditPost";
+import Categories from "./pages/Categories";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute"
 import { AuthProvider } from "./context/AuthContext";
@@ -51,6 +52,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <EditPost />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Gestión de categorías - ruta protegida */}
+          <Route
+            path="/categorias"
+            element={
+              <ProtectedRoute>
+                <Categories />
               </ProtectedRoute>
             }
           />
