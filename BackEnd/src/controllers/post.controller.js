@@ -22,7 +22,8 @@ export const create = async (req, res, next) => {
 
 export const getAll = async (req, res, next) => {
   try {
-    const posts = await getAllPostsService();
+    const { category } = req.query;
+    const posts = await getAllPostsService(category);
     return res.status(200).json(posts);
   } catch (error) {
     next(error);
