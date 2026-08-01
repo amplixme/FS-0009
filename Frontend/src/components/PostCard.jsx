@@ -2,19 +2,19 @@
  * Tarjeta de post reutilizable en Home.
  * Se envuelve en Link para navegar al detalle (/posts/:id).
  */
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString('es-AR', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+  return date.toLocaleDateString("es-AR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   });
 };
 
 const PostCard = ({ post }) => {
-  const authorName = post.author?.name || 'Autor desconocido';
+  const authorName = post.author?.name || "Autor desconocido";
   const authorInitial = authorName.charAt(0).toUpperCase();
 
   return (
@@ -22,7 +22,18 @@ const PostCard = ({ post }) => {
       <article className="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
         {/* Placeholder de imagen*/}
         <div className="aspect-video overflow-hidden bg-gradient-to-br from-primary-container/20 to-secondary-container/20 flex items-center justify-center">
-          <span className="material-symbols-outlined text-5xl text-primary/30">article</span>
+          {post.coverImage ? (
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              loading="lazy"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <span className="material-symbols-outlined text-5xl text-primary/30">
+              article
+            </span>
+          )}
         </div>
 
         <div className="p-8">
@@ -46,7 +57,9 @@ const PostCard = ({ post }) => {
               </div>
               <div>
                 <p className="text-xs font-bold">{authorName}</p>
-                <p className="text-[10px] text-outline">{formatDate(post.createdAt)}</p>
+                <p className="text-[10px] text-outline">
+                  {formatDate(post.createdAt)}
+                </p>
               </div>
             </div>
           </div>
