@@ -4,6 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAll as getAllCategories } from '../services/category.service';
 
 const PostForm = ({
   initialData = null,
@@ -18,8 +19,10 @@ const PostForm = ({
     title: initialData?.title || '',
     content: initialData?.content || '',
     published: initialData?.published || false,
+    categoryIds: initialData?.categories?.map((c) => c.id) || [],
   });
   const [errors, setErrors] = useState({});
+  const [availableCategories, setAvailableCategories] = useState([]);
 
   useEffect(() => {
     if (initialData) {
@@ -27,13 +30,40 @@ const PostForm = ({
         title: initialData.title || '',
         content: initialData.content || '',
         published: initialData.published || false,
+        categoryIds: initialData.categories?.map((c) => c.id) || [],
       });
     }
   }, [initialData]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getAllCategories();
+        setAvailableCategories(data);
+      } catch (err) {
+        console.error('Error al cargar categorías:', err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const toggleCategory = (categoryId) => {
+    setFormData((prev) => {
+      const current = prev.categoryIds || [];
+      const isSelected = current.includes(categoryId);
+      return {
+        ...prev,
+        categoryIds: isSelected
+          ? current.filter((id) => id !== categoryId)
+          : [...current, categoryId],
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -94,14 +124,24 @@ const PostForm = ({
         {/* Categories & Metadata */}
         <section className="mb-12 flex flex-wrap items-center gap-4">
           <div className="flex flex-wrap gap-2">
-            <span className="flex items-center gap-2 px-3 py-1.5 bg-secondary-fixed text-on-secondary-fixed rounded-full text-xs font-semibold">
-              Tecnología
-              <button type="button" className="hover:text-primary"><span className="material-symbols-outlined text-sm">close</span></button>
-            </span>
-            <button type="button" className="flex items-center gap-1 px-3 py-1.5 border border-outline-variant rounded-full text-xs font-medium text-on-surface-variant hover:bg-surface-container-high transition-colors">
-              <span className="material-symbols-outlined text-sm">add</span>
-              Añadir categoría
-            </button>
+            {availableCategories.map((cat) => {
+              const isSelected = formData.categoryIds.includes(cat.id);
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => toggleCategory(cat.id)}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                    isSelected
+                      ? 'bg-secondary-fixed text-on-secondary-fixed'
+                      : 'border border-outline-variant text-on-surface-variant hover:bg-surface-container-high'
+                  }`}
+                >
+                  {isSelected && <span className="material-symbols-outlined text-sm">check</span>}
+                  {cat.name}
+                </button>
+              );
+            })}
           </div>
         </section>
 
