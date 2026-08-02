@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { getAll } from '../services/post.service';
 import PostCard from '../components/PostCard';
 // Componentes comunes extraidos para reutilizar en PostDetail, busquedas, etc.
@@ -12,6 +12,8 @@ import CategoryFilter from '../components/CategoryFilter';
 const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const urlCategory = searchParams.get('category');
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +22,11 @@ const Home = () => {
     message: location.state?.successMessage || '',
     type: 'success',
   });
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(urlCategory);
+
+  useEffect(() => {
+    setActiveCategory(urlCategory);
+  }, [urlCategory]);
 
   useEffect(() => {
     const fetchPosts = async () => {
