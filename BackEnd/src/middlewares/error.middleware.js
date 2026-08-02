@@ -6,8 +6,18 @@ const errorHandler = (err, req, res, next) => {
   let status = err.status || 500;
   let message = err.message || 'Internal Server Error';
 
-  // Control de errores de Prisma
-  if (err.code) {
+  // Control de errores de Multer (subida de archivos)
+  if (err.name === 'MulterError') {
+    status = 400;
+    switch (err.code) {
+      case 'LIMIT_FILE_SIZE':
+        message = 'El archivo excede el tamaño máximo permitido (5MB)';
+        break;
+      default:
+        message = 'Error al procesar el archivo subido';
+    }
+  } else if (err.code) {
+    // Control de errores de Prisma
     switch (err.code) {
       case 'P2002':
         status = 409;

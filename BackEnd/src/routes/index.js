@@ -2,6 +2,7 @@ import { Router } from 'express';
 import authRouter from './auth.routes.js';
 import postRoutes from './post.routes.js';
 import categoryRoutes from './category.routes.js';
+import uploadRoutes from './upload.routes.js';
 
 
 const router = Router();
@@ -15,6 +16,7 @@ router.get('/health', (req, res) => {
 router.use('/auth', authRouter);
 router.use('/posts', postRoutes);
 router.use('/categories', categoryRoutes);
+router.use('/upload', uploadRoutes);
 
 // ──────────────────────────────────────────────
 //  Cómo agregar una nueva ruta:
