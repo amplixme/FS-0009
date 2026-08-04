@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAll as getAllCategories } from '../services/category.service';
+import ImageUpload from './common/ImageUpload';
 
 const PostForm = ({
   initialData = null,
@@ -20,6 +21,7 @@ const PostForm = ({
     content: initialData?.content || '',
     published: initialData?.published || false,
     categoryIds: initialData?.categories?.map((c) => c.id) || [],
+    coverImage: initialData?.coverImage || null,
   });
   const [errors, setErrors] = useState({});
   const [availableCategories, setAvailableCategories] = useState([]);
@@ -31,6 +33,7 @@ const PostForm = ({
         content: initialData.content || '',
         published: initialData.published || false,
         categoryIds: initialData.categories?.map((c) => c.id) || [],
+        coverImage: initialData.coverImage || null,
       });
     }
   }, [initialData]);
@@ -64,6 +67,10 @@ const PostForm = ({
           : [...current, categoryId],
       };
     });
+  };
+
+  const handleCoverChange = (url) => {
+    setFormData((prev) => ({ ...prev, coverImage: url }));
   };
 
   const handleSubmit = async (e) => {
@@ -107,6 +114,11 @@ const PostForm = ({
             <p className="text-error text-sm font-semibold">{serverError}</p>
           </div>
         )}
+
+        {/* Cover Image */}
+        <section className="mb-8">
+          <ImageUpload value={formData.coverImage} onChange={handleCoverChange} />
+        </section>
 
         {/* Article Title */}
         <section className="mb-8">
