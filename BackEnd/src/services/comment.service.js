@@ -36,3 +36,23 @@ export const createCommentService = async ({ content,postId,authorId }) => {
 
   return newComment;
 };
+
+// Obtener comentarios de un post
+export const getCommentsByPostIdService = async (postId) => {
+  const comments = await prisma.comment.findMany({
+    where: { postId: Number(postId) },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  return comments;
+};
