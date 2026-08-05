@@ -18,7 +18,7 @@ router.use('/auth', authRouter);
 router.use('/posts', postRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/upload', uploadRoutes);
-router.use("/posts",commentRoutes);
+router.use("/",commentRoutes);
 
 // ──────────────────────────────────────────────
 //  Cómo agregar una nueva ruta:
