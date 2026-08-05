@@ -79,6 +79,7 @@ export const updateCommentService = async (id, data) => {
       content: true,
       createdAt: true,
       updatedAt: true,
+      authorId: true,
       author: {
         select: {
           name: true,
