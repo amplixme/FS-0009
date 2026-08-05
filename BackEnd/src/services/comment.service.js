@@ -45,7 +45,9 @@ export const getCommentsByPostIdService = async (postId) => {
     select: {
       id: true,
       content: true,
+      authorId: true,
       createdAt: true,
+      updatedAt: true,
       author: {
         select: {
           name: true,
