@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRouter from './auth.routes.js';
 import postRoutes from './post.routes.js';
+import commentRoutes from "./comment.routes.js";
 import categoryRoutes from './category.routes.js';
 import uploadRoutes from './upload.routes.js';
 
@@ -17,6 +18,7 @@ router.use('/auth', authRouter);
 router.use('/posts', postRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/upload', uploadRoutes);
+router.use("/posts",commentRoutes);
 
 // ──────────────────────────────────────────────
 //  Cómo agregar una nueva ruta:
