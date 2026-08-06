@@ -45,7 +45,9 @@ export const getCommentsByPostIdService = async (postId) => {
     select: {
       id: true,
       content: true,
+      authorId: true,
       createdAt: true,
+      updatedAt: true,
       author: {
         select: {
           name: true,
@@ -55,4 +57,43 @@ export const getCommentsByPostIdService = async (postId) => {
   });
 
   return comments;
+};
+
+// Buscar comentario por ID
+export const getCommentByIdService = async (id) => {
+  const comment = await prisma.comment.findUnique({
+    where: { id: Number(id) },
+  });
+  return comment;
+};
+
+// Actualizar comentario
+export const updateCommentService = async (id, data) => {
+  const updatedComment = await prisma.comment.update({
+    where: { id: Number(id) },
+    data: {
+      content: data.content,
+    },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      updatedAt: true,
+      authorId: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  return updatedComment;
+};
+
+// Eliminar comentario
+export const deleteCommentService = async (id) => {
+  await prisma.comment.delete({
+    where: { id: Number(id) },
+  });
+  return true;
 };
