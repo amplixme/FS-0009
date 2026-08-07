@@ -1,0 +1,9 @@
+minimumReleaseAge: 10080
+
+nodeLinker: hoisted
+
+allowBuilds:
+  esbuild: true
+
+autoInstallPeers: true
+strictPeerDependencies: false

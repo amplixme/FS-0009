@@ -1,0 +1,12 @@
+minimumReleaseAge: 10080
+
+nodeLinker: hoisted
+
+allowBuilds:
+  "@prisma/engines": true
+  "@prisma/client": true
+  prisma: true
+  bcrypt: true
+
+autoInstallPeers: true
+strictPeerDependencies: false
