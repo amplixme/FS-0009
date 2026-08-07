@@ -12,6 +12,7 @@ import ErrorMessage from "../components/common/ErrorMessage";
 import EmptyState from "../components/common/EmptyState";
 import ConfirmModal from "../components/common/ConfirmModal";
 import Toast from "../components/common/Toast";
+import CommentSection from "../components/CommentSection";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -179,6 +180,7 @@ const PostDetail = () => {
               </button>
             </div>
           )}
+          <CommentSection postId={post.id} />
         </article>
 
         {/* Sidebar */}
