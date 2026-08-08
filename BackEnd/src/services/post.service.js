@@ -72,6 +72,11 @@ export const getAllPostsService = async (categorySlug) => {
           slug: true,
         },
       },
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
     },
   });
 
