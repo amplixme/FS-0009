@@ -80,7 +80,10 @@ export const getAllPostsService = async (categorySlug) => {
     },
   });
 
-  return posts;
+  return posts.map((post) => ({
+    ...post,
+    commentCount: post._count.comments,
+  }));
 };
 
 // Obtener un post por su ID

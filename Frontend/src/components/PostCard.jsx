@@ -96,7 +96,7 @@ const PostCard = ({ post }) => {
             <div className="flex items-center gap-1 text-outline">
               <span className="material-symbols-outlined text-sm">forum</span>
               <span className="text-xs font-medium">
-                {post._count?.comments ?? 0}
+                {post.commentCount ?? 0}
               </span>
             </div>
           </div>
