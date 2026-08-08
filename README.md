@@ -87,11 +87,14 @@ pnpm run lint     # ESLint
 
 Este proyecto usa **pnpm** con medidas de defensa contra ataques de supply-chain estilo Shai-Hulud (worm de NPM):
 
-- **`minimumReleaseAge: 10080`** (7 días): bloquea paquetes publicados hace menos de 7 días, principal vector de infección del worm.
+- **`minimumReleaseAge`**: bloquea paquetes publicados hace menos de N días, principal vector de infección del worm. BackEnd usa 7 días (10080 min); Frontend usa 4 días (5760 min) por excepción del fix de nanoid (ver [`docs/SUPPLY-CHAIN-HARDENING.md`](docs/SUPPLY-CHAIN-HARDENING.md)).
 - **`allowBuilds` (allowlist explícita)**: solo los paquetes aprobados (`@prisma/engines`, `@prisma/client`, `prisma`, `bcrypt` en Backend; `esbuild` en Frontend) pueden ejecutar scripts `postinstall`. Cualquier otro script es bloqueado por defecto.
 - **`pnpm audit`**: ejecutá regularmente para detectar vulnerabilidades conocidas.
 
-Si necesitás instalar una dependencia publicada hace menos de 7 días (ej. un fix crítico), agregala temporalmente al `allowBuilds` de `pnpm-workspace.yaml` y revisala manualmente. Nunca la dejes habilitada por defecto.
+> [!IMPORTANT]
+> Para entender por qué `minimumReleaseAge` difiere entre BackEnd y Frontend, y el razonamiento completo detrás del fix de nanoid, leer [`docs/SUPPLY-CHAIN-HARDENING.md`](docs/SUPPLY-CHAIN-HARDENING.md).
+
+Si necesitás instalar una dependencia publicada hace menos de X días (ej. un fix crítico), leé [`docs/SUPPLY-CHAIN-HARDENING.md`](docs/SUPPLY-CHAIN-HARDENING.md) para el procedimiento seguro.
 
 Para verificar la integridad de los lockfiles después de instalar:
 ```bash
@@ -103,6 +106,8 @@ cd Frontend && pnpm audit
 
 ```
 FS-0009/
+├── docs/
+│   └── SUPPLY-CHAIN-HARDENING.md # hardening y razonamiento de seguridad
 ├── BackEnd/
 │   ├── pnpm-workspace.yaml       # hardening (allowBuilds, minimumReleaseAge)
 │   ├── .env.example              # plantilla de variables de entorno
