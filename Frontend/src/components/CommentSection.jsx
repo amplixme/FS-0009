@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { getByPostId } from "../services/comment.service";
 import Spinner from "./common/Spinner";
+import { formatRelativeTime } from "../utils/formatRelativeTime";
 
+/*
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("es-AR", {
@@ -9,7 +11,7 @@ const formatDate = (dateString) => {
     month: "long",
     year: "numeric",
   });
-};
+};*/
 
 const CommentSection = ({ postId }) => {
   const [comments, setComments] = useState([]);
@@ -64,7 +66,7 @@ const CommentSection = ({ postId }) => {
                     {comment.author?.name || "Usuario"}
                   </span>
                   <span className="text-xs text-on-surface-variant">
-                    {formatDate(comment.createdAt)}
+                    {formatRelativeTime(comment.createdAt)}
                   </span>
                 </div>
                 <p className="text-on-surface-variant text-sm mt-1">

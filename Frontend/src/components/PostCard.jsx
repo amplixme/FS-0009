@@ -4,9 +4,10 @@
  * Click en un badge de categoria navega a /?category=slug (filtra la lista).
  */
 import { Link, useNavigate } from "react-router-dom";
+import { formatRelativeTime } from "../utils/formatRelativeTime";
 
 const MAX_VISIBLE_BADGES = 3;
-
+/*
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("es-AR", {
@@ -14,7 +15,7 @@ const formatDate = (dateString) => {
     month: "short",
     year: "numeric",
   });
-};
+};*/
 
 const PostCard = ({ post }) => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const PostCard = ({ post }) => {
               <div>
                 <p className="text-xs font-bold">{authorName}</p>
                 <p className="text-[10px] text-outline">
-                  {formatDate(post.createdAt)}
+                  {formatRelativeTime(post.createdAt)}
                 </p>
               </div>
             </div>
