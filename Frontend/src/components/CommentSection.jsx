@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { getByPostId } from "../services/comment.service";
+import { Link } from "react-router-dom";
+import { getByPostId, create } from "../services/comment.service";
+import { useAuth } from "../context/useAuth";
 import Spinner from "./common/Spinner";
 
 const formatDate = (dateString) => {
@@ -12,13 +14,33 @@ const formatDate = (dateString) => {
 };
 
 const CommentSection = ({ postId }) => {
+  const { isAuthenticated } = useAuth();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [content, setContent] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
-  // eslint-disable-next-line no-unused-vars -- se usa al integrar el form de FS0009-47
   const refreshComments = () => setReloadKey((prev) => prev + 1);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!content.trim()) return;
+
+    try {
+      setSubmitting(true);
+      setSubmitError(null);
+      await create(postId, content.trim());
+      setContent("");
+      refreshComments();
+    } catch (err) {
+      setSubmitError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -74,6 +96,42 @@ const CommentSection = ({ postId }) => {
             </li>
           ))}
         </ul>
+      )}
+
+      {isAuthenticated ? (
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 rounded-2xl bg-white border border-outline-variant/40 p-4 focus-within:ring-2 focus-within:ring-primary/50 transition-shadow"
+        >
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Escribí un comentario..."
+            rows={3}
+            disabled={submitting}
+            className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-sm text-on-surface placeholder:text-on-surface-variant/60 resize-none disabled:opacity-60"
+            style={{ border: "none", boxShadow: "none" }}
+          />
+          {submitError && (
+            <p className="text-error text-sm mt-2">{submitError}</p>
+          )}
+          <div className="flex justify-end mt-2">
+            <button
+              type="submit"
+              disabled={submitting || !content.trim()}
+              className="px-6 py-2 rounded-full bg-primary text-on-primary font-semibold text-sm hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {submitting ? "Enviando..." : "Comentar"}
+            </button>
+          </div>
+        </form>
+      ) : (
+        <p className="text-on-surface-variant text-sm text-center mt-8 py-4 border-t border-outline-variant/20">
+          <Link to="/login" className="text-primary font-semibold hover:underline">
+            Inicia sesión
+          </Link>{" "}
+          para comentar
+        </p>
       )}
     </section>
   );
