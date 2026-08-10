@@ -1,0 +1,12 @@
+minimumReleaseAge: 5760
+
+nodeLinker: hoisted
+
+allowBuilds:
+  esbuild: true
+
+autoInstallPeers: true
+strictPeerDependencies: false
+
+overrides:
+  nanoid: 3.3.17
