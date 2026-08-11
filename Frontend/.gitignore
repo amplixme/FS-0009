@@ -26,3 +26,4 @@ dist-ssr
 # Entorno local
 .env
 .env.*
+!.env.example
