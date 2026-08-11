@@ -39,8 +39,6 @@ model Post{
   coverImage  String?
   published Boolean @default(false)
   authorId Int
-  bio  String?
-  avatarURL String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author User @relation(fields: [authorId], references: [id])
