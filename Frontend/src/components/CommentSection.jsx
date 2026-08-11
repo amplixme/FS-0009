@@ -3,16 +3,8 @@ import { Link } from "react-router-dom";
 import { getByPostId, create, update, deleteComment } from "../services/comment.service";
 import { useAuth } from "../context/useAuth";
 import Spinner from "./common/Spinner";
+import { formatRelativeTime } from "../utils/formatRelativeTime";
 import ConfirmModal from "./common/ConfirmModal";
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("es-AR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-};
 
 const CommentSection = ({ postId }) => {
   const { user, isAuthenticated } = useAuth();
@@ -20,19 +12,24 @@ const CommentSection = ({ postId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
+
+  
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
+  
   const [editingId, setEditingId] = useState(null);
   const [editingContent, setEditingContent] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
+  
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const refreshComments = () => setReloadKey((prev) => prev + 1);
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!content.trim()) return;
@@ -67,6 +64,7 @@ const CommentSection = ({ postId }) => {
     fetchComments();
   }, [postId, reloadKey]);
 
+  
   const handleEdit = (comment) => {
     setEditingId(comment.id);
     setEditingContent(comment.content);
@@ -94,6 +92,7 @@ const CommentSection = ({ postId }) => {
     }
   };
 
+  
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
@@ -140,7 +139,7 @@ const CommentSection = ({ postId }) => {
                         {comment.author?.name || "Usuario"}
                       </span>
                       <span className="text-xs text-on-surface-variant">
-                        {formatDate(comment.createdAt)}
+                        {formatRelativeTime(comment.createdAt)}
                       </span>
                     </div>
                     {isOwn && !isEditing && (

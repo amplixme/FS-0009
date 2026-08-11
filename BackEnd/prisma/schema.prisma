@@ -28,6 +28,8 @@ model User{
   role Role @default(USER)
   posts Post[]
   comments Comment[]
+  bio       String? 
+  avatarUrl String?  
 }
 
 model Post{
