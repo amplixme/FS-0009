@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { getByPostId, create, update, deleteComment } from "../services/comment.service";
 import { useAuth } from "../context/useAuth";
 import Spinner from "./common/Spinner";
+import { formatRelativeTime } from "../utils/formatRelativeTime";
 import ConfirmModal from "./common/ConfirmModal";
 
+/*
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("es-AR", {
@@ -12,7 +14,7 @@ const formatDate = (dateString) => {
     month: "long",
     year: "numeric",
   });
-};
+};*/
 
 const CommentSection = ({ postId }) => {
   const { user, isAuthenticated } = useAuth();
@@ -140,7 +142,7 @@ const CommentSection = ({ postId }) => {
                         {comment.author?.name || "Usuario"}
                       </span>
                       <span className="text-xs text-on-surface-variant">
-                        {formatDate(comment.createdAt)}
+                        {formatRelativeTime(comment.createdAt)}
                       </span>
                     </div>
                     {isOwn && !isEditing && (
