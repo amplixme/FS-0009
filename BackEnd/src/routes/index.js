@@ -4,6 +4,7 @@ import postRoutes from './post.routes.js';
 import commentRoutes from "./comment.routes.js";
 import categoryRoutes from './category.routes.js';
 import uploadRoutes from './upload.routes.js';
+import userRoutes from './user.routes.js';
 
 
 const router = Router();
@@ -19,6 +20,7 @@ router.use('/posts', postRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/upload', uploadRoutes);
 router.use("/",commentRoutes);
+router.use("/users", userRoutes);
 
 // ──────────────────────────────────────────────
 //  Cómo agregar una nueva ruta:
