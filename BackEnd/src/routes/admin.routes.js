@@ -10,6 +10,7 @@ import {
   deleteUser,
   deletePost,
   deleteComment,
+  getAllComments,
 } from "../controllers/admin.controller.js";
 
 const router = Router();
@@ -27,6 +28,7 @@ router.delete("/users/:id", deleteUser);
 
 router.delete("/posts/:id", deletePost);
 
+router.get("/comments", getAllComments);
 router.delete("/comments/:id", deleteComment);
 
 export default router;
