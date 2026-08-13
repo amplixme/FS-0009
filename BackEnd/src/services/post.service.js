@@ -5,7 +5,7 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 // Crear post
-export const createPostService = async ({ title, content, coverImage, authorId, published}) => {
+export const createPostService = async ({ title, content, coverImage, authorId, published, categoryIds }) => {
   const newPost = await prisma.post.create({
     data: {
       title,
@@ -13,6 +13,12 @@ export const createPostService = async ({ title, content, coverImage, authorId, 
       published,
       coverImage,
       authorId,
+      // Vincula las categorías si vienen en la petición
+      ...(categoryIds && categoryIds.length > 0 && {
+        categories: {
+          connect: categoryIds.map((id) => ({ id })),
+        },
+      }),
     },
     select: {
       id: true,
@@ -25,6 +31,13 @@ export const createPostService = async ({ title, content, coverImage, authorId, 
       author: {
         select: {
           name: true,
+        },
+      },
+      categories: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
         },
       },
     },
@@ -156,10 +169,21 @@ export const getPostByIdService = async (id) => {
 };
 
 // Actualizar post
-export const updatePostService = async (id, { title, content, coverImage, published }) => { 
+export const updatePostService = async (id, { title, content, coverImage, published, categoryIds }) => { 
   const updatedPost = await prisma.post.update({
     where: { id: Number(id) },
-    data: { title, content, coverImage, published },
+    data: { 
+      title, 
+      content, 
+      coverImage, 
+      published,
+      // Reemplaza las categorías vinculadas si vienen en la petición
+     ...(categoryIds && {
+        categories: {
+          set: categoryIds.map((id) => ({ id })),
+        },
+      }),
+    },
     select: {
       id: true,
       title: true,
@@ -185,7 +209,6 @@ export const updatePostService = async (id, { title, content, coverImage, publis
 
   return updatedPost;
 };
-
 // Eliminar post
 export const deletePostService = async (id) => {
   await prisma.post.delete({
