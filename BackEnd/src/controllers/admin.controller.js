@@ -7,6 +7,7 @@ import {
   deleteUserService,
   deletePostService,
   deleteCommentService,
+  getAllCommentsService,
 } from "../services/admin.service.js";
 
 // GET /api/admin/stats
@@ -118,6 +119,16 @@ export const deleteComment = async (req, res, next) => {
     const { id } = req.params;
     await deleteCommentService(id);
     return res.status(200).json({ message: "Comentario eliminado correctamente" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// GET /api/admin/comments
+export const getAllComments = async (req, res, next) => {
+  try {
+    const comments = await getAllCommentsService();
+    return res.status(200).json(comments);
   } catch (error) {
     next(error);
   }

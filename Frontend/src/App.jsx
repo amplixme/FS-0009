@@ -9,6 +9,8 @@ import Categories from "./pages/Categories";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute"
 import { AuthProvider } from "./context/AuthContext";
+import Admin from "./pages/Admin";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 
 function App() {
   return (
@@ -30,10 +32,10 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           <Route path="/post" element={
-              <ProtectedRoute>
-                <Post />
-              </ProtectedRoute>
-            }
+            <ProtectedRoute>
+              <Post />
+            </ProtectedRoute>
+          }
           />
 
           {/* Detalle de post - ruta publica con Layout */}
@@ -63,6 +65,18 @@ function App() {
               <ProtectedRoute>
                 <Categories />
               </ProtectedRoute>
+            }
+          />
+
+          {/* Panel de administración - ruta protegida (solo ADMIN) */}
+          <Route
+            path="/admin"
+            element={
+              <Layout>
+                <ProtectedAdminRoute>
+                  <Admin />
+                </ProtectedAdminRoute>
+              </Layout>
             }
           />
         </Routes>

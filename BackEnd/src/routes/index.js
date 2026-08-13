@@ -7,6 +7,7 @@ import uploadRoutes from './upload.routes.js';
 import userRoutes from './user.routes.js';
 import adminRoutes from './admin.routes.js';
 
+
 const router = Router();
 
 // Health check

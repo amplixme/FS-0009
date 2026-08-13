@@ -13,6 +13,13 @@ export const getStatsService = async () => {
   const totalUsers = await prisma.user.count();
   const totalPosts = await prisma.post.count();
   const totalComments = await prisma.comment.count();
+
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const postsToday = await prisma.post.count({
+    where: { createdAt: { gte: startOfToday } },
+  });
+
   const postsByCategory = await prisma.category.findMany({
     select: {
       id: true,
@@ -28,6 +35,7 @@ export const getStatsService = async () => {
     totalUsers,
     totalPosts,
     totalComments,
+    postsToday,
     postsByCategory: postsByCategory.map((cat) => ({
       id: cat.id,
       name: cat.name,
@@ -152,4 +160,25 @@ export const deleteCommentService = async (id) => {
   await prisma.comment.delete({
     where: { id: Number(id) },
   });
+};
+
+// Obtener los comentarios más recientes de todo el sitio
+export const getAllCommentsService = async () => {
+  const comments = await prisma.comment.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 10,
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      author: {
+        select: { name: true },
+      },
+      post: {
+        select: { id: true, title: true },
+      },
+    },
+  });
+
+  return comments;
 };

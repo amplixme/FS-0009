@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 
 const Header = ({ onMenuToggle }) => {
     const { user, isAuthenticated, logout } = useAuth();
+    const location = useLocation();
+
+    const activeClass = "text-blue-700 dark:text-blue-400 font-bold border-b-2 border-blue-700 dark:border-blue-400 pb-1 font-inter tracking-tight";
+    const inactiveClass = "text-slate-600 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200 font-inter tracking-tight";
 
     return (
         <>
@@ -15,11 +19,11 @@ const Header = ({ onMenuToggle }) => {
                         </Link>
 
                         <nav className="hidden md:flex gap-6">
-                            <Link to="/" className="text-blue-700 dark:text-blue-400 font-bold border-b-2 border-blue-700 dark:border-blue-400 pb-1 font-inter tracking-tight">Latest</Link>
-                            <a href="#" className="text-slate-600 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200 font-inter tracking-tight">Popular</a>
-                            <a href="#" className="text-slate-600 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200 font-inter tracking-tight">Newsletter</a>
-                            {user?.role === 'admin' && (
-                                <Link to="/admin" className="text-slate-600 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200 font-inter tracking-tight">Admin</Link>
+                            <Link to="/" className={location.pathname === "/" ? activeClass : inactiveClass}>Latest</Link>
+                            <a href="#" className={inactiveClass}>Popular</a>
+                            <a href="#" className={inactiveClass}>Newsletter</a>
+                            {user?.role === 'ADMIN' && (
+                                <Link to="/admin" className={location.pathname === "/admin" ? activeClass : inactiveClass}>Admin</Link>
                             )}
                         </nav>
                     </div>
