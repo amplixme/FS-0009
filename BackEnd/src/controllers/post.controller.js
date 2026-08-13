@@ -22,9 +22,9 @@ export const create = async (req, res, next) => {
 
 export const getAll = async (req, res, next) => {
   try {
-    const { category } = req.query;
-    const posts = await getAllPostsService(category);
-    return res.status(200).json(posts);
+    // Le pasamos req.query completo (trae page, limit, sort, category)
+    const result = await getAllPostsService(req.query);
+    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }

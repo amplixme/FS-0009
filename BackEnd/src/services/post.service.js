@@ -33,8 +33,18 @@ export const createPostService = async ({ title, content, coverImage, authorId, 
   return newPost;
 };
 
-// Obtener todos los post (con filtro opcional por slug de categoría)
-export const getAllPostsService = async (categorySlug) => {
+// Obtener todos los post con paginación, ordenamiento y filtro por categoría
+export const getAllPostsService = async (queryParams = {}) => {
+  // 1. Extraer y parsear parámetros con sus valores por defecto
+  const page = Math.max(1, Number(queryParams.page) || 1);
+  const limit = Math.max(1, Number(queryParams.limit) || 10);
+  const sort = queryParams.sort || "newest";
+  const categorySlug = queryParams.category;
+
+  // 2. Calcular elementos a saltar
+  const skip = (page - 1) * limit;
+
+  // 3. Configurar filtro de la consulta
   const where = {
     published: true,
   };
@@ -47,43 +57,71 @@ export const getAllPostsService = async (categorySlug) => {
     };
   }
 
-  const posts = await prisma.post.findMany({
-    where,
-    orderBy: {
-      createdAt: 'desc',
-    },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      coverImage: true,
-      published: true,
-      createdAt: true,
-      updatedAt: true,
-      author: {
-        select: {
-          name: true,
-        },
-      },
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-        },
-      },
-    },
-  });
+  // 4. Configurar ordenamiento según query params: newest | oldest | comments
+  let orderBy = { createdAt: "desc" };
 
-  return posts.map((post) => ({
+  if (sort === "oldest") {
+    orderBy = { createdAt: "asc" };
+  } else if (sort === "comments") {
+    orderBy = {
+      comments: {
+        _count: "desc",
+      },
+    };
+  }
+
+  // 5. Consultas a la base de datos en paralelo
+  const [total, posts] = await Promise.all([
+    prisma.post.count({ where }),
+    prisma.post.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy,
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        coverImage: true,
+        published: true,
+        createdAt: true,
+        updatedAt: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+        categories: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
+    }),
+  ]);
+
+  // 6. Formatear lista de publicaciones
+  const formattedPosts = posts.map((post) => ({
     ...post,
     commentCount: post._count.comments,
   }));
+
+  // 7. Calcular total de páginas
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+    data: formattedPosts,
+    total,
+    page,
+    totalPages,
+  };
 };
 
 // Obtener un post por su ID
