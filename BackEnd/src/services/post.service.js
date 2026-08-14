@@ -46,13 +46,14 @@ export const createPostService = async ({ title, content, coverImage, authorId, 
   return newPost;
 };
 
-// Obtener todos los post con paginación, ordenamiento y filtro por categoría
+// Obtener todos los post con paginación, ordenamiento, filtro por categoría y BÚSQUEDA
 export const getAllPostsService = async (queryParams = {}) => {
   // 1. Extraer y parsear parámetros con sus valores por defecto
   const page = Math.max(1, Number(queryParams.page) || 1);
   const limit = Math.max(1, Number(queryParams.limit) || 10);
   const sort = queryParams.sort || "newest";
   const categorySlug = queryParams.category;
+  const search = queryParams.search; // 👈 🎯 Extraemos el query param search
 
   // 2. Calcular elementos a saltar
   const skip = (page - 1) * limit;
@@ -62,12 +63,32 @@ export const getAllPostsService = async (queryParams = {}) => {
     published: true,
   };
 
+  // Filtro por categoría (si viene en la query)
   if (categorySlug) {
     where.categories = {
       some: {
         slug: categorySlug,
       },
     };
+  }
+
+  // 🎯 Búsqueda case-insensitive en título o contenido (FS0009-54)
+  if (search && search.trim() !== "") {
+    const searchTerm = search.trim();
+    where.OR = [
+      {
+        title: {
+          contains: searchTerm,
+          mode: "insensitive",
+        },
+      },
+      {
+        content: {
+          contains: searchTerm,
+          mode: "insensitive",
+        },
+      },
+    ];
   }
 
   // 4. Configurar ordenamiento según query params: newest | oldest | comments
@@ -178,7 +199,7 @@ export const updatePostService = async (id, { title, content, coverImage, publis
       coverImage, 
       published,
       // Reemplaza las categorías vinculadas si vienen en la petición
-     ...(categoryIds && {
+      ...(categoryIds && {
         categories: {
           set: categoryIds.map((id) => ({ id })),
         },
@@ -209,6 +230,7 @@ export const updatePostService = async (id, { title, content, coverImage, publis
 
   return updatedPost;
 };
+
 // Eliminar post
 export const deletePostService = async (id) => {
   await prisma.post.delete({
