@@ -1,40 +1,47 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { getAll } from '../services/post.service';
 import PostCard from '../components/PostCard';
-// Componentes comunes extraidos para reutilizar en PostDetail, busquedas, etc.
+import SearchBar from '../components/SearchBar';
 import Spinner from '../components/common/Spinner';
 import ErrorMessage from '../components/common/ErrorMessage';
 import EmptyState from '../components/common/EmptyState';
 import Toast from '../components/common/Toast';
 import CategoryFilter from '../components/CategoryFilter';
+import Pagination from '../components/Pagination';
 
 const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const urlCategory = searchParams.get('category');
+
+  const urlCategory = searchParams.get('category') || null;
+  const urlSearch = searchParams.get('search') || '';
+  const urlPage = parseInt(searchParams.get('page') || '1', 10);
+  const urlSort = searchParams.get('sort') || 'newest';
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [toast, setToast] = useState({
-    visible: !!location.state?.successMessage,
-    message: location.state?.successMessage || '',
-    type: 'success',
-  });
-  const [activeCategory, setActiveCategory] = useState(urlCategory);
-
-  useEffect(() => {
-    setActiveCategory(urlCategory);
-  }, [urlCategory]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getAll(activeCategory);
-        setPosts(data);
+
+        const params = {};
+        if (urlCategory) params.category = urlCategory;
+        if (urlSearch.trim()) params.search = urlSearch.trim();
+        if (urlPage > 1) params.page = urlPage;
+        if (urlSort !== 'newest') params.sort = urlSort;
+
+        const response = await getAll(params);
+        setPosts(response.posts || []);
+        setTotalPages(response.totalPages || 1);
+        setTotal(response.total || 0);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -43,49 +50,85 @@ const Home = () => {
     };
 
     fetchPosts();
-  }, [activeCategory]);
+  }, [urlCategory, urlSearch, urlPage, urlSort]);
+
+  const handleSearch = useCallback((searchTerm) => {
+    const params = new URLSearchParams(searchParams);
+    if (searchTerm.trim()) {
+      params.set('search', searchTerm.trim());
+    } else {
+      params.delete('search');
+    }
+    params.set('page', '1');
+    navigate({ pathname: '/', search: params.toString() }, { replace: true });
+  }, [navigate, searchParams]);
+
+  const handleCategoryChange = useCallback((category) => {
+    const params = new URLSearchParams(searchParams);
+    if (category) {
+      params.set('category', category);
+    } else {
+      params.delete('category');
+    }
+    params.set('page', '1');
+    params.delete('search');
+    navigate({ pathname: '/', search: params.toString() }, { replace: true });
+  }, [navigate, searchParams]);
+
+  const clearSearch = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('search');
+    params.set('page', '1');
+    navigate({ pathname: '/', search: params.toString() }, { replace: true });
+  }, [navigate, searchParams]);
+
+  const hasActiveFilters = urlCategory || urlSearch.trim();
 
   return (
     <div className="pb-20 max-w-7xl mx-auto px-6">
-      {/* Hero Section */}
-      <section className="mb-16">
-        <div className="relative p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/5 to-primary-container/10">
-          <div className="relative z-10 max-w-2xl">
-            <h1 className="text-5xl font-extrabold text-on-surface mb-6 tight-tracking leading-tight">Últimas publicaciones</h1>
-            <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-4 text-outline">search</span>
-              <input className="w-full pl-12 pr-6 py-4 bg-surface-container-lowest border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 transition-all text-lg placeholder:text-outline/50" placeholder="Buscar artículos..." type="text" />
-            </div>
-          </div>
+      <section className="mb-8">
+        <div className="max-w-2xl mx-auto">
+          <SearchBar
+            value={urlSearch}
+            onSearch={handleSearch}
+            placeholder="Buscar artículos..."
+            showClearButton={!!urlSearch.trim()}
+          />
         </div>
       </section>
 
-      {/* Chips de categorías - mobile */}
-      <div className="mb-6 lg:hidden">
-        <CategoryFilter activeCategory={activeCategory} onSelectCategory={setActiveCategory} />
-      </div>
+      <section className="mb-6 lg:hidden">
+        <CategoryFilter activeCategory={urlCategory} onSelectCategory={handleCategoryChange} />
+      </section>
 
       <div className="flex gap-12">
-        {/* Sidebar Navigation Shell */}
         <aside className="w-64 hidden lg:block sticky top-24 h-fit">
           <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-4 tight-tracking">Categorías</h3>
-          <CategoryFilter activeCategory={activeCategory} onSelectCategory={setActiveCategory} />
+          <CategoryFilter activeCategory={urlCategory} onSelectCategory={handleCategoryChange} />
+          
+          {hasActiveFilters && (
+            <button
+              onClick={clearSearch}
+              className="mt-4 w-full px-4 py-2 text-sm text-slate-600 hover:bg-surface-container-low rounded-lg transition-colors"
+            >
+              Limpiar filtros
+            </button>
+          )}
         </aside>
 
-        {/* Main Content Grid */}
         <div className="flex-1">
           {loading && <Spinner size="lg" text="Cargando publicaciones..." />}
 
           {!loading && error && (
-            <ErrorMessage message={error} onRetry={() => { setError(null); setLoading(true); }} />
+            <ErrorMessage message={error} onRetry={() => window.location.reload()} />
           )}
 
           {!loading && !error && posts.length === 0 && (
             <EmptyState
-              icon="article"
-              message="Todavía no hay publicaciones."
-              actionLabel="Crear primera publicación"
-              onAction={() => navigate('/post')}
+              icon={urlSearch.trim() ? "search" : "article"}
+              message={urlSearch.trim() ? "No se encontraron artículos" : "Todavía no hay publicaciones."}
+              actionLabel={urlSearch.trim() ? "Limpiar búsqueda" : "Crear primera publicación"}
+              onAction={urlSearch.trim() ? clearSearch : () => navigate('/post')}
             />
           )}
 
@@ -96,28 +139,27 @@ const Home = () => {
               ))}
             </div>
           )}
-          {/* Pagination */}
-          <nav className="mt-16 flex justify-center items-center gap-2">
-            <button className="p-2 rounded-lg text-outline hover:bg-surface-container-low transition-colors">
-              <span className="material-symbols-outlined">chevron_left</span>
-            </button>
-            <button className="w-10 h-10 rounded-lg bg-primary text-on-primary font-bold shadow-md">1</button>
-            <button className="w-10 h-10 rounded-lg text-on-surface hover:bg-surface-container-low transition-colors">2</button>
-            <button className="w-10 h-10 rounded-lg text-on-surface hover:bg-surface-container-low transition-colors">3</button>
-            <span className="px-2 text-outline">...</span>
-            <button className="w-10 h-10 rounded-lg text-on-surface hover:bg-surface-container-low transition-colors">12</button>
-            <button className="p-2 rounded-lg text-outline hover:bg-surface-container-low transition-colors">
-              <span className="material-symbols-outlined">chevron_right</span>
-            </button>
-          </nav>
+
+          <Pagination 
+            currentPage={urlPage} 
+            totalPages={totalPages} 
+          />
         </div>
       </div>
 
+      <div className="mt-8 text-center text-sm text-outline">
+        {total > 0 && (
+          <>
+            Mostrando {Math.min((urlPage - 1) * 10 + 1, total)} - {Math.min(urlPage * 10, total)} de {total} publicaciones
+          </>
+        )}
+      </div>
+
       <Toast
-        message={toast.message}
-        type={toast.type}
-        isVisible={toast.visible}
-        onClose={() => setToast({ ...toast, visible: false })}
+        message={location?.state?.successMessage || ''}
+        type="success"
+        isVisible={!!location?.state?.successMessage}
+        onClose={() => {}}
       />
     </div>
   );

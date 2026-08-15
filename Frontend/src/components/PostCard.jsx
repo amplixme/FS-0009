@@ -1,21 +1,7 @@
-/**
- * Tarjeta de post reutilizable en Home.
- * Se envuelve en Link para navegar al detalle (/posts/:id).
- * Click en un badge de categoria navega a /?category=slug (filtra la lista).
- */
 import { Link, useNavigate } from "react-router-dom";
 import { formatRelativeTime } from "../utils/formatRelativeTime";
 
 const MAX_VISIBLE_BADGES = 3;
-/*
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("es-AR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-};*/
 
 const PostCard = ({ post }) => {
   const navigate = useNavigate();
@@ -97,7 +83,7 @@ const PostCard = ({ post }) => {
             <div className="flex items-center gap-1 text-outline">
               <span className="material-symbols-outlined text-sm">forum</span>
               <span className="text-xs font-medium">
-                {post._count?.comments ?? 0}
+                {post.commentCount ?? 0}
               </span>
             </div>
           </div>
