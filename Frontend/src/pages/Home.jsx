@@ -8,13 +8,19 @@ import ErrorMessage from '../components/common/ErrorMessage';
 import EmptyState from '../components/common/EmptyState';
 import Toast from '../components/common/Toast';
 import CategoryFilter from '../components/CategoryFilter';
+import Pagination from '../components/common/Pagination';
+
+const POSTS_PER_PAGE = 4;
 
 const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const urlCategory = searchParams.get('category');
+  const urlPage = Number(searchParams.get('page')) || 1;
+
   const [posts, setPosts] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [toast, setToast] = useState({
@@ -33,8 +39,13 @@ const Home = () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getAll(activeCategory);
-        setPosts(data);
+        const data = await getAll({
+          page: urlPage,
+          limit: POSTS_PER_PAGE,
+          category: activeCategory,
+        });
+        setPosts(data.data);
+        setTotalPages(data.totalPages);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -43,7 +54,29 @@ const Home = () => {
     };
 
     fetchPosts();
-  }, [activeCategory]);
+  }, [activeCategory, urlPage]);
+
+  const handleSelectCategory = (slug) => {
+    const params = new URLSearchParams(searchParams);
+    if (slug) {
+      params.set('category', slug);
+    } else {
+      params.delete('category');
+    }
+    params.delete('page'); // volver a la página 1 al cambiar de categoría
+    setSearchParams(params);
+  };
+
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams);
+    if (page > 1) {
+      params.set('page', page);
+    } else {
+      params.delete('page');
+    }
+    setSearchParams(params);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="pb-20 max-w-7xl mx-auto px-6">
@@ -62,14 +95,14 @@ const Home = () => {
 
       {/* Chips de categorías - mobile */}
       <div className="mb-6 lg:hidden">
-        <CategoryFilter activeCategory={activeCategory} onSelectCategory={setActiveCategory} />
+        <CategoryFilter activeCategory={activeCategory} onSelectCategory={handleSelectCategory} />
       </div>
 
       <div className="flex gap-12">
         {/* Sidebar Navigation Shell */}
         <aside className="w-64 hidden lg:block sticky top-24 h-fit">
           <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-4 tight-tracking">Categorías</h3>
-          <CategoryFilter activeCategory={activeCategory} onSelectCategory={setActiveCategory} />
+          <CategoryFilter activeCategory={activeCategory} onSelectCategory={handleSelectCategory} />
         </aside>
 
         {/* Main Content Grid */}
@@ -96,20 +129,14 @@ const Home = () => {
               ))}
             </div>
           )}
-          {/* Pagination */}
-          <nav className="mt-16 flex justify-center items-center gap-2">
-            <button className="p-2 rounded-lg text-outline hover:bg-surface-container-low transition-colors">
-              <span className="material-symbols-outlined">chevron_left</span>
-            </button>
-            <button className="w-10 h-10 rounded-lg bg-primary text-on-primary font-bold shadow-md">1</button>
-            <button className="w-10 h-10 rounded-lg text-on-surface hover:bg-surface-container-low transition-colors">2</button>
-            <button className="w-10 h-10 rounded-lg text-on-surface hover:bg-surface-container-low transition-colors">3</button>
-            <span className="px-2 text-outline">...</span>
-            <button className="w-10 h-10 rounded-lg text-on-surface hover:bg-surface-container-low transition-colors">12</button>
-            <button className="p-2 rounded-lg text-outline hover:bg-surface-container-low transition-colors">
-              <span className="material-symbols-outlined">chevron_right</span>
-            </button>
-          </nav>
+
+          {!loading && !error && posts.length > 0 && (
+            <Pagination
+              currentPage={urlPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
 
