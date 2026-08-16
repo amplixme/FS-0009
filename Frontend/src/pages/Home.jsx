@@ -8,9 +8,11 @@ import ErrorMessage from '../components/common/ErrorMessage';
 import EmptyState from '../components/common/EmptyState';
 import Toast from '../components/common/Toast';
 import CategoryFilter from '../components/CategoryFilter';
+import SortSelector from '../components/SortSelector';
 import Pagination from '../components/common/Pagination';
 
 const POSTS_PER_PAGE = 4;
+const SORT_VALUES = ['newest', 'oldest', 'comments'];
 
 const Home = () => {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const urlCategory = searchParams.get('category');
   const urlPage = Number(searchParams.get('page')) || 1;
+  const rawSort = searchParams.get('sort');
+  const urlSort = SORT_VALUES.includes(rawSort) ? rawSort : 'newest';
 
   const [posts, setPosts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -28,11 +32,6 @@ const Home = () => {
     message: location.state?.successMessage || '',
     type: 'success',
   });
-  const [activeCategory, setActiveCategory] = useState(urlCategory);
-
-  useEffect(() => {
-    setActiveCategory(urlCategory);
-  }, [urlCategory]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -42,7 +41,8 @@ const Home = () => {
         const data = await getAll({
           page: urlPage,
           limit: POSTS_PER_PAGE,
-          category: activeCategory,
+          category: urlCategory,
+          sort: urlSort,
         });
         setPosts(data.data);
         setTotalPages(data.totalPages);
@@ -54,7 +54,7 @@ const Home = () => {
     };
 
     fetchPosts();
-  }, [activeCategory, urlPage]);
+  }, [urlCategory, urlPage, urlSort]);
 
   const handleSelectCategory = (slug) => {
     const params = new URLSearchParams(searchParams);
@@ -78,6 +78,13 @@ const Home = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleSortChange = (sortValue) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('sort', sortValue);
+    params.delete('page'); // volver a la página 1 al cambiar el ordenamiento
+    setSearchParams(params);
+  };
+
   return (
     <div className="pb-20 max-w-7xl mx-auto px-6">
       {/* Hero Section */}
@@ -95,14 +102,14 @@ const Home = () => {
 
       {/* Chips de categorías - mobile */}
       <div className="mb-6 lg:hidden">
-        <CategoryFilter activeCategory={activeCategory} onSelectCategory={handleSelectCategory} />
+        <CategoryFilter activeCategory={urlCategory} onSelectCategory={handleSelectCategory} />
       </div>
 
       <div className="flex gap-12">
         {/* Sidebar Navigation Shell */}
         <aside className="w-64 hidden lg:block sticky top-24 h-fit">
           <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-4 tight-tracking">Categorías</h3>
-          <CategoryFilter activeCategory={activeCategory} onSelectCategory={handleSelectCategory} />
+          <CategoryFilter activeCategory={urlCategory} onSelectCategory={handleSelectCategory} />
         </aside>
 
         {/* Main Content Grid */}
@@ -120,6 +127,12 @@ const Home = () => {
               actionLabel="Crear primera publicación"
               onAction={() => navigate('/post')}
             />
+          )}
+
+          {!loading && !error && posts.length > 0 && (
+            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+              <SortSelector value={urlSort} onChange={handleSortChange} />
+            </div>
           )}
 
           {!loading && !error && posts.length > 0 && (
