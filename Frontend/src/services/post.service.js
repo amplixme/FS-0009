@@ -1,6 +1,6 @@
 import api from './api';
 
-export const getAll = async ({ page, limit, category, sort, search } = {}) => {
+export const getAll = async ({ page, limit, category, sort, search } = {}, signal) => {
   try {
     const params = {};
     if (page) params.page = page;
@@ -9,7 +9,7 @@ export const getAll = async ({ page, limit, category, sort, search } = {}) => {
     if (sort) params.sort = sort;
     if (search) params.search = search;
 
-    const response = await api.get('/posts', { params });
+    const response = await api.get('/posts', { params, signal });
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.error?.message || 'Error al obtener los posts', { cause: error });
