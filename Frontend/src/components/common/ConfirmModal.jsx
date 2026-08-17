@@ -16,11 +16,11 @@ const ConfirmModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm"
       onClick={onCancel}
     >
       <div
-        className="bg-surface-container-lowest rounded-2xl shadow-xl max-w-md w-full mx-4 p-6"
+        className="bg-surface-container-lowest rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-md sm:mx-4 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-6 max-h-[90dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 mb-4">
@@ -36,16 +36,16 @@ const ConfirmModal = ({
 
         <p className="text-on-surface-variant mb-6">{message}</p>
 
-        <div className="flex justify-end gap-3">
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
           <button
             onClick={onCancel}
-            className="px-5 py-2 rounded-full border border-outline-variant text-on-surface font-semibold text-sm hover:bg-surface-container-high transition-colors"
+            className="w-full sm:w-auto px-5 py-2 rounded-full border border-outline-variant text-on-surface font-semibold text-sm hover:bg-surface-container-high transition-colors"
           >
             {cancelLabel}
           </button>
           <button
             onClick={onConfirm}
-            className={`px-5 py-2 rounded-full font-bold text-sm transition-colors ${
+            className={`w-full sm:w-auto px-5 py-2 rounded-full font-bold text-sm transition-colors ${
               danger
                 ? 'bg-error text-on-error hover:bg-error/90'
                 : 'bg-primary text-on-primary hover:bg-primary/90'

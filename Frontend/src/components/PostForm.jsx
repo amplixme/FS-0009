@@ -124,7 +124,7 @@ const PostForm = ({
         <section className="mb-8">
           <input
             name="title"
-            className="w-full bg-transparent border-none p-0 text-[3.5rem] font-extrabold tracking-tight placeholder:text-on-surface-variant/30 focus:ring-0 leading-[1.1] text-on-surface"
+            className="w-full bg-transparent border-none p-0 text-[2.5rem] md:text-[3.5rem] font-extrabold tracking-tight placeholder:text-on-surface-variant/30 focus:ring-0 leading-[1.1] text-on-surface"
             placeholder="Título del artículo"
             type="text"
             value={formData.title}
@@ -172,7 +172,7 @@ const PostForm = ({
 
         {/* Settings Section */}
         <section className="mt-20 pt-12 border-t border-outline-variant/15">
-          <div className="flex items-center justify-between p-6 bg-surface-container-low rounded-xl">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-6 bg-surface-container-low rounded-xl">
             <div>
               <h4 className="font-bold text-on-surface">Visibilidad y Programación</h4>
               <p className="text-sm text-on-surface-variant">Configura cuándo será visible este artículo para tus lectores.</p>
@@ -193,7 +193,7 @@ const PostForm = ({
         </section>
 
         {/* Footer / Sticky Bottom Bar */}
-        <footer className="fixed bottom-0 left-0 w-full bg-slate-50 dark:bg-slate-950 flex justify-between items-center px-6 py-3 border-t border-slate-200/10 z-50">
+        <footer className="fixed bottom-0 left-0 w-full bg-slate-50 dark:bg-slate-950 flex flex-wrap justify-between items-center gap-3 px-6 py-3 border-t border-slate-200/10 z-50">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-secondary"></div>
             <span className="text-[10px] uppercase tracking-widest font-medium text-slate-400 dark:text-slate-500">

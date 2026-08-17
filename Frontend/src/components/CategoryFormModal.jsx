@@ -37,8 +37,8 @@ const CategoryFormModal = ({ isOpen, mode, initialData, onClose, onSubmit, isSav
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-surface-container-lowest rounded-2xl shadow-xl w-full max-w-md p-6">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 sm:p-4">
+      <div className="bg-surface-container-lowest rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-md p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-6 max-h-[90dvh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-on-surface">
             {mode === 'edit' ? 'Editar categoría' : 'Crear nueva categoría'}
@@ -82,18 +82,18 @@ const CategoryFormModal = ({ isOpen, mode, initialData, onClose, onSubmit, isSav
             <p className="text-error text-sm font-semibold mb-4">{serverError}</p>
           )}
 
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-surface-container-low transition-colors"
+              className="w-full sm:w-auto px-5 py-2 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-surface-container-low transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="px-5 py-2 rounded-full bg-primary text-on-primary font-semibold hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto px-5 py-2 rounded-full bg-primary text-on-primary font-semibold hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSaving ? 'Guardando...' : mode === 'edit' ? 'Guardar cambios' : 'Crear categoría'}
             </button>

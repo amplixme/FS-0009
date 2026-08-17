@@ -96,7 +96,7 @@ const Categories = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-6 pb-20 pt-12">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <h1 className="text-3xl font-extrabold text-on-surface tight-tracking">Categorías</h1>
         <button
           onClick={openCreateModal}
