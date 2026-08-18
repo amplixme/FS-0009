@@ -1,11 +1,16 @@
 import api from './api';
 
-export const getAll = async (categorySlug) => {
+export const getAll = async ({ page, limit, category, sort, search } = {}) => {
   try {
-    const response = await api.get('/posts', {
-      params: categorySlug ? { category: categorySlug } : {},
-    });
-    return response.data.data;
+    const params = {};
+    if (page) params.page = page;
+    if (limit) params.limit = limit;
+    if (category) params.category = category;
+    if (sort) params.sort = sort;
+    if (search) params.search = search;
+
+    const response = await api.get('/posts', { params });
+    return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.error?.message || 'Error al obtener los posts', { cause: error });
   }
