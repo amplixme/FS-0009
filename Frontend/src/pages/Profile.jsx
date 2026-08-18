@@ -40,8 +40,12 @@ const Profile = () => {
       try {
         setLoadingPosts(true);
         setError(null);
-        const data = await getAll();
-        const userPosts = data.filter(post => post.author.name === profile.name);
+
+        const response = await getAll();
+        const allPosts = response.data;
+        const userPosts = allPosts.filter(post => post.author.name === profile.name);
+        // const data = await getAll();
+        // const userPosts = data.filter(post => post.author.name === profile.name);
         setPosts(userPosts);
       } catch (err) {
         setError(err.message);
@@ -75,13 +79,11 @@ const Profile = () => {
 
   const isOwnProfile = !!(currentUser && profile && String(currentUser.id) === String(profile.id));
 
-  console.log(isOwnProfile)
-
   return (
     <>
       <section className="max-w-[900px] mx-auto mb-12">
         <div className="bg-surface-container-lowest rounded-[16px] p-8 md:p-12 shadow-[0_20px_40px_rgba(17,24,39,0.05)] flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-10">
-          {/* Avatar dinámico basado en el diseño del PDF [7, 10] */}
+          {/* Avatar del usuario*/}
           <div className="relative flex-shrink-0">
             <div className="w-[120px] h-[120px] rounded-full overflow-hidden border-4 border-surface-container-low">
               <img src={profile.avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
@@ -101,7 +103,7 @@ const Profile = () => {
               </span>
             </div>
 
-            {/* Lógica de visualización del botón requerida [6] */}
+            {/* Lógica de visualización del botón Editar Perfil*/}
             {isOwnProfile && (
               <div className="pt-2">
                 <button
