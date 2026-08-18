@@ -42,10 +42,7 @@ const Profile = () => {
         setError(null);
 
         const response = await getAll();
-        const allPosts = response.data;
-        const userPosts = allPosts.filter(post => post.author.name === profile.name);
-        // const data = await getAll();
-        // const userPosts = data.filter(post => post.author.name === profile.name);
+        const userPosts = response.data.filter(post => post.author.name === profile.name);
         setPosts(userPosts);
       } catch (err) {
         setError(err.message);
