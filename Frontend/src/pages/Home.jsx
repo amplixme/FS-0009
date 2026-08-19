@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { getAll } from '../services/post.service';
 import PostCard from '../components/PostCard';
@@ -9,6 +9,7 @@ import EmptyState from '../components/common/EmptyState';
 import Toast from '../components/common/Toast';
 import CategoryFilter from '../components/CategoryFilter';
 import SortSelector from '../components/SortSelector';
+import SearchBar from '../components/SearchBar';
 import Pagination from '../components/common/Pagination';
 
 const POSTS_PER_PAGE = 4;
@@ -18,12 +19,15 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const urlCategory = searchParams.get('category');
+  const urlSearch = searchParams.get('search') || '';
+  const urlCategory = searchParams.get('category') || '';
   const urlPage = Number(searchParams.get('page')) || 1;
   const rawSort = searchParams.get('sort');
   const urlSort = SORT_VALUES.includes(rawSort) ? rawSort : 'newest';
+  const hasActiveFilters = Boolean(urlSearch) || Boolean(urlCategory);
 
   const [posts, setPosts] = useState([]);
+  const [totalPosts, setTotalPosts] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,55 +38,91 @@ const Home = () => {
   });
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchPosts = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getAll({
-          page: urlPage,
-          limit: POSTS_PER_PAGE,
-          category: urlCategory,
-          sort: urlSort,
-        });
+        const data = await getAll(
+          {
+            page: urlPage,
+            limit: POSTS_PER_PAGE,
+            category: urlCategory || undefined,
+            search: urlSearch || undefined,
+            sort: urlSort,
+          },
+          controller.signal
+        );
         setPosts(data.data);
+        setTotalPosts(data.total);
         setTotalPages(data.totalPages);
       } catch (err) {
-        setError(err.message);
+        if (!controller.signal.aborted) {
+          setError(err.message);
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchPosts();
-  }, [urlCategory, urlPage, urlSort]);
+    return () => controller.abort();
+  }, [urlSearch, urlCategory, urlPage, urlSort]);
 
-  const handleSelectCategory = (slug) => {
+  const updateParams = (mutations) => {
     const params = new URLSearchParams(searchParams);
-    if (slug) {
-      params.set('category', slug);
-    } else {
-      params.delete('category');
-    }
-    params.delete('page'); // volver a la página 1 al cambiar de categoría
+    mutations(params);
     setSearchParams(params);
   };
 
-  const handlePageChange = (page) => {
-    const params = new URLSearchParams(searchParams);
-    if (page > 1) {
-      params.set('page', page);
-    } else {
+  const handleSearchChange = (value) => {
+    updateParams((params) => {
+      if (value) {
+        params.set('search', value);
+      } else {
+        params.delete('search');
+      }
+      params.delete('page'); // volver a la página 1 al cambiar la búsqueda
+    });
+  };
+
+  const handleSelectCategory = (slug) => {
+    updateParams((params) => {
+      if (slug) {
+        params.set('category', slug);
+      } else {
+        params.delete('category');
+      }
+      params.delete('page'); // volver a la página 1 al cambiar de categoría
+    });
+  };
+
+  const handleClearFilters = () => {
+    updateParams((params) => {
+      params.delete('search');
+      params.delete('category');
       params.delete('page');
-    }
-    setSearchParams(params);
+    });
+  };
+
+  const handlePageChange = (page) => {
+    updateParams((params) => {
+      if (page > 1) {
+        params.set('page', page);
+      } else {
+        params.delete('page');
+      }
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSortChange = (sortValue) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('sort', sortValue);
-    params.delete('page'); // volver a la página 1 al cambiar el ordenamiento
-    setSearchParams(params);
+    updateParams((params) => {
+      params.set('sort', sortValue);
+      params.delete('page'); // volver a la página 1 al cambiar el ordenamiento
+    });
   };
 
   return (
@@ -92,10 +132,7 @@ const Home = () => {
         <div className="relative p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/5 to-primary-container/10">
           <div className="relative z-10 max-w-2xl">
             <h1 className="text-5xl font-extrabold text-on-surface mb-6 tight-tracking leading-tight">Últimas publicaciones</h1>
-            <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-4 text-outline">search</span>
-              <input className="w-full pl-12 pr-6 py-4 bg-surface-container-lowest border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 transition-all text-lg placeholder:text-outline/50" placeholder="Buscar artículos..." type="text" />
-            </div>
+            <SearchBar defaultValue={urlSearch} onSearch={handleSearchChange} />
           </div>
         </div>
       </section>
@@ -110,6 +147,15 @@ const Home = () => {
         <aside className="w-64 hidden lg:block sticky top-24 h-fit">
           <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-4 tight-tracking">Categorías</h3>
           <CategoryFilter activeCategory={urlCategory} onSelectCategory={handleSelectCategory} />
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={handleClearFilters}
+              className="w-full mt-4 px-4 py-2 text-sm font-medium text-primary bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors"
+            >
+              Limpiar filtros
+            </button>
+          )}
         </aside>
 
         {/* Main Content Grid */}
@@ -122,11 +168,32 @@ const Home = () => {
 
           {!loading && !error && posts.length === 0 && (
             <EmptyState
-              icon="article"
-              message="Todavía no hay publicaciones."
-              actionLabel="Crear primera publicación"
-              onAction={() => navigate('/post')}
+              icon={hasActiveFilters ? 'search_off' : 'article'}
+              message={
+                hasActiveFilters
+                  ? 'No se encontraron artículos para tu búsqueda.'
+                  : 'Todavía no hay publicaciones.'
+              }
+              actionLabel={
+                hasActiveFilters
+                  ? 'Limpiar filtros'
+                  : 'Crear primera publicación'
+              }
+              onAction={() =>
+                hasActiveFilters ? handleClearFilters() : navigate('/post')
+              }
             />
+          )}
+
+          {hasActiveFilters && !loading && !error && posts.length > 0 && (
+            <p className="mb-8 text-sm text-outline">
+              {totalPosts} {totalPosts === 1 ? 'resultado' : 'resultados'}
+              {urlSearch && (
+                <>
+                  {' '}para <strong className="text-on-surface">"{urlSearch}"</strong>
+                </>
+              )}
+            </p>
           )}
 
           {!loading && !error && posts.length > 0 && (
