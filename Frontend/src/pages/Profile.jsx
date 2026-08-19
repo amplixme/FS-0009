@@ -9,7 +9,7 @@ import ProfileFormModal from '../components/ProfileFormModal';
 import { AuthContext } from '../context/AuthContextInstance';
 
 const Profile = () => {
-  const { user: currentUser } = useContext(AuthContext);
+  const { user: currentUser, updateUser } = useContext(AuthContext);
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState(null);
@@ -53,6 +53,7 @@ const Profile = () => {
     fetchPosts();
   }, [profile]);
 
+  const isOwnProfile = !!(currentUser && profile && String(currentUser.id) === String(profile.id));
 
   const updateProfile = async (data) => {
     try {
@@ -62,6 +63,9 @@ const Profile = () => {
       setEditTarget(null);
       const updatedData = await userService.getProfile(id);
       setProfile(updatedData);
+      if (isOwnProfile) {
+        updateUser({ name: updatedData.name, bio: updatedData.bio, avatarUrl: updatedData.avatarUrl });
+      }
     } catch (err) {
       setEditError(err.message);
     } finally {
@@ -72,8 +76,6 @@ const Profile = () => {
   if (error) return <div className="pt-32 text-center text-error">{error}</div>;
 
   if (!profile) return <Spinner size="lg" text="Cargando perfil..." />;
-
-  const isOwnProfile = !!(currentUser && profile && String(currentUser.id) === String(profile.id));
 
   return (
     <>
@@ -125,7 +127,7 @@ const Profile = () => {
             Comentarios
           </button>
         </section>
-        
+
         {loadingPosts ? (
           <Spinner size="lg" text="Cargando publicaciones..." />
         ) : posts.length === 0 ? (
