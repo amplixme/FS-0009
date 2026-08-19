@@ -3,7 +3,6 @@ import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAll } from '../services/post.service';
 import userService from '../services/user.service';
-import { formatRelativeTime } from "../utils/formatRelativeTime";
 import PostCard from '../components/PostCard';
 import Spinner from '../components/common/Spinner'
 import ProfileFormModal from '../components/ProfileFormModal';
@@ -41,8 +40,8 @@ const Profile = () => {
         setLoadingPosts(true);
         setError(null);
 
-        const response = await getAll();
-        const userPosts = response.data.filter(post => post.author.name === profile.name);
+        const response = await getAll({ limit: 100 });
+        const userPosts = response.data.filter(post => post.author.id === profile.id);
         setPosts(userPosts);
       } catch (err) {
         setError(err.message);
@@ -126,25 +125,22 @@ const Profile = () => {
             Comentarios
           </button>
         </section>
-
-        <section className="max-w-[900px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          <article className="bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-[0_20px_40px_rgba(17,24,39,0.05)] transition-all duration-300 group">
-
-            {loadingPosts ? (
-              <Spinner size="lg" text="Cargando publicaciones..." />
-            ) : posts.length === 0 ? (
-              <div className="text-center py-16 bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant">
-                <p className="text-on-surface-variant font-medium text-lg">
-                  Este usuario aún no ha publicado nada.
-                </p>
-              </div>
-            ) : (
-              posts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))
-            )}
-          </article>
-        </section>
+        
+        {loadingPosts ? (
+          <Spinner size="lg" text="Cargando publicaciones..." />
+        ) : posts.length === 0 ? (
+          <div className="max-w-[900px] mx-auto text-center py-16 bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant">
+            <p className="text-on-surface-variant font-medium text-lg">
+              Este usuario aún no ha publicado nada.
+            </p>
+          </div>
+        ) : (
+          <section className="max-w-[900px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </section>
+        )}
       </section>
 
       <ProfileFormModal
