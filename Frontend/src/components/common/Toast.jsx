@@ -43,9 +43,9 @@ const Toast = ({
   const s = styles[type] || styles.success;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
+    <div className="fixed bottom-6 inset-x-4 sm:inset-x-auto sm:right-6 z-50 animate-slide-up flex">
       <div
-        className={`flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg ${s.bg} ${s.text}`}
+        className={`flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg w-full sm:w-auto ${s.bg} ${s.text}`}
       >
         <span className="material-symbols-outlined text-lg">{s.icon}</span>
         <span className="font-medium text-sm">{message}</span>

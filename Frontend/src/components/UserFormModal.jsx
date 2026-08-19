@@ -18,8 +18,8 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/40">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-md overflow-hidden max-h-[90dvh] flex flex-col pb-[env(safe-area-inset-bottom)]">
         {/* Header */}
         <div className="flex items-center justify-between px-8 py-6 border-b border-outline-variant/20">
           <h2 className="text-xl font-bold text-on-surface">
@@ -35,7 +35,7 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="p-8 space-y-6 overflow-y-auto">
           <div>
             <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">
               Nombre completo
@@ -129,19 +129,19 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
           {error && <p className="text-error text-sm">{error}</p>}
 
           {/* Footer */}
-          <div className="flex justify-end gap-4 pt-2">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-4 pt-2">
             <button
               type="button"
               onClick={onCancel}
               disabled={isSubmitting}
-              className="px-6 py-2.5 rounded-full text-on-surface-variant font-semibold border-2 border-outline-variant hover:bg-surface-container-low transition-all disabled:opacity-60"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-full text-on-surface-variant font-semibold border-2 border-outline-variant hover:bg-surface-container-low transition-all disabled:opacity-60"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 rounded-full bg-primary text-on-primary font-semibold hover:bg-primary/90 transition-all disabled:opacity-60"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-primary text-on-primary font-semibold hover:bg-primary/90 transition-all disabled:opacity-60"
             >
               {isSubmitting
                 ? mode === "create"

@@ -3,20 +3,17 @@ import Header from './Header';
 import MenuMobile from './MenuMobile'; 
 import Footer from './Footer';
 
-const Layout = ({ children, role, userName, userEmail }) => {
+const Layout = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
 
-      <Header onMenuToggle={() => setIsMenuOpen((prev) => !prev)} role={role} />
+      <Header onMenuToggle={() => setIsMenuOpen((prev) => !prev)} isMenuOpen={isMenuOpen} />
 
-    <MenuMobile 
-        isOpen={isMenuOpen} 
-        onClose={() => setIsMenuOpen(false)} 
-        role={role}
-        userName={userName}
-        userEmail={userEmail}
+      <MenuMobile
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
       />
 
       {/* Contenido principal */}

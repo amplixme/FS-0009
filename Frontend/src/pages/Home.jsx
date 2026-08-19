@@ -129,9 +129,9 @@ const Home = () => {
     <div className="pb-20 max-w-7xl mx-auto px-6">
       {/* Hero Section */}
       <section className="mb-16">
-        <div className="relative p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/5 to-primary-container/10">
+        <div className="relative p-6 md:p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/5 to-primary-container/10">
           <div className="relative z-10 max-w-2xl">
-            <h1 className="text-5xl font-extrabold text-on-surface mb-6 tight-tracking leading-tight">Últimas publicaciones</h1>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-6 tight-tracking leading-tight">Últimas publicaciones</h1>
             <SearchBar defaultValue={urlSearch} onSearch={handleSearchChange} />
           </div>
         </div>

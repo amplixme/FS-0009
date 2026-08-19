@@ -1,7 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 
-const Header = ({ onMenuToggle }) => {
+const getInitials = (name = '') =>
+    name
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((word) => word[0].toUpperCase())
+        .join('');
+
+const Header = ({ onMenuToggle, isMenuOpen }) => {
     const { user, isAuthenticated, logout } = useAuth();
     const location = useLocation();
 
@@ -74,14 +82,18 @@ const Header = ({ onMenuToggle }) => {
                         <button
                             type="button"
                             onClick={onMenuToggle}
-                            aria-label="Abrir menú"
-                            className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/10 cursor-pointer transition-transform hover:scale-105"
+                            aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+                            aria-expanded={isMenuOpen}
+                            aria-controls="mobile-menu"
+                            className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/10 cursor-pointer transition-transform hover:scale-105 flex items-center justify-center bg-primary/10"
                         >
-                            <img
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT95iqiYxi6VZXmrtLvbsuXkNVD367C45aiXNvED7mI-XevT2y4sbMA_NgYjv00TpUJL3vsTnmUBtnvrmSBHbXwPx-Xjum6GGBODPuq-P3ntfsg9lF7VaQ9VUkDVO8S2FEKTR-1xCuNW3mMO3uTar5TF_Fbj1s28RUobKNEY-1ujJ640oG2sxkptBCQtWUOLFcThP4Yd434sLN56Rv8KaZiSV6FoGRtzHoxqeQ0rcWnmHuXPhBlOOFMqVwiCnS8RHJLc7HWGoi1cqE"
-                                alt="User profile"
-                                className="w-full h-full object-cover"
-                            />
+                            {isAuthenticated ? (
+                                <span className="text-primary font-bold text-sm">
+                                    {getInitials(user?.name) || '?'}
+                                </span>
+                            ) : (
+                                <span className="material-symbols-outlined text-primary">menu</span>
+                            )}
                         </button>
                     </div>
                 </div>
