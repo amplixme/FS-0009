@@ -8,10 +8,12 @@ import ErrorMessage from '../components/common/ErrorMessage';
 import EmptyState from '../components/common/EmptyState';
 import Toast from '../components/common/Toast';
 import CategoryFilter from '../components/CategoryFilter';
+import SortSelector from '../components/SortSelector';
 import SearchBar from '../components/SearchBar';
 import Pagination from '../components/common/Pagination';
 
 const POSTS_PER_PAGE = 4;
+const SORT_VALUES = ['newest', 'oldest', 'comments'];
 
 const Home = () => {
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ const Home = () => {
   const urlSearch = searchParams.get('search') || '';
   const urlCategory = searchParams.get('category') || '';
   const urlPage = Number(searchParams.get('page')) || 1;
+  const rawSort = searchParams.get('sort');
+  const urlSort = SORT_VALUES.includes(rawSort) ? rawSort : 'newest';
   const hasActiveFilters = Boolean(urlSearch) || Boolean(urlCategory);
 
   const [posts, setPosts] = useState([]);
@@ -45,6 +49,7 @@ const Home = () => {
             limit: POSTS_PER_PAGE,
             category: urlCategory || undefined,
             search: urlSearch || undefined,
+            sort: urlSort,
           },
           controller.signal
         );
@@ -64,7 +69,7 @@ const Home = () => {
 
     fetchPosts();
     return () => controller.abort();
-  }, [urlSearch, urlCategory, urlPage]);
+  }, [urlSearch, urlCategory, urlPage, urlSort]);
 
   const updateParams = (mutations) => {
     const params = new URLSearchParams(searchParams);
@@ -113,6 +118,13 @@ const Home = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleSortChange = (sortValue) => {
+    updateParams((params) => {
+      params.set('sort', sortValue);
+      params.delete('page'); // volver a la página 1 al cambiar el ordenamiento
+    });
+  };
+
   return (
     <div className="pb-20 max-w-7xl mx-auto px-6">
       {/* Hero Section */}
@@ -128,7 +140,7 @@ const Home = () => {
       {/* Chips de categorías - mobile */}
       <div className="mb-6 lg:hidden">
         <CategoryFilter activeCategory={urlCategory} onSelectCategory={handleSelectCategory} />
-     </div>
+      </div>
 
       <div className="flex gap-12">
         {/* Sidebar Navigation Shell */}
@@ -142,9 +154,9 @@ const Home = () => {
               className="w-full mt-4 px-4 py-2 text-sm font-medium text-primary bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors"
             >
               Limpiar filtros
-           </button>
+            </button>
           )}
-       </aside>
+        </aside>
 
         {/* Main Content Grid */}
         <div className="flex-1">
@@ -182,6 +194,12 @@ const Home = () => {
                 </>
               )}
             </p>
+          )}
+
+          {!loading && !error && posts.length > 0 && (
+            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+              <SortSelector value={urlSort} onChange={handleSortChange} />
+            </div>
           )}
 
           {!loading && !error && posts.length > 0 && (
