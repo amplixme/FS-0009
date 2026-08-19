@@ -30,6 +30,15 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   }, []);
 
+  // actualiza solo los datos del usuario (ej: después de editar perfil), sin tocar el token
+  const updateUser = useCallback((updatedFields) => {
+    setUser((prev) => {
+      const merged = { ...prev, ...updatedFields };
+      localStorage.setItem('user', JSON.stringify(merged));
+      return merged;
+    });
+  }, []);
+
   // cierra la sesión
   const logout = useCallback(() => {
     localStorage.removeItem('token');
@@ -47,8 +56,8 @@ export const AuthProvider = ({ children }) => {
   const isAuthenticated = Boolean(token && user);
 
   const value = useMemo(
-    () => ({ user, token, login, logout, isAuthenticated }),
-    [user, token, login, logout, isAuthenticated]
+    () => ({ user, token, login, logout, updateUser, isAuthenticated }),
+    [user, token, login, logout, updateUser, isAuthenticated]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
