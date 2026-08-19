@@ -18,6 +18,7 @@ export const getUserProfile = async (userId) => {
       name: true,
       bio: true,
       avatarUrl: true,
+      createdAt: true,
       _count: {
         select: { posts: true },
       },
@@ -35,6 +36,7 @@ export const getUserProfile = async (userId) => {
     name: user.name,
     bio: user.bio,
     avatarUrl: user.avatarUrl,
+    createdAt: user.createdAt,
     postsCount: user._count.posts,
   };
 };
