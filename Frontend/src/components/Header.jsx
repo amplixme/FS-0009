@@ -30,16 +30,15 @@ const Header = ({ onMenuToggle, isMenuOpen }) => {
                             <Link to="/" className={location.pathname === "/" ? activeClass : inactiveClass}>Latest</Link>
                             <a href="#" className={inactiveClass}>Popular</a>
                             <a href="#" className={inactiveClass}>Newsletter</a>
-                            {isAuthenticated ? (
-                                <>
-                                    <a href={`/profile/${user.id}`}>Perfil</a>
-                                </>
-                            ) : (
-                                <>
-                                    
-                                </>
+                            {isAuthenticated && (
+                                <Link
+                                    to={`/profile/${user.id}`}
+                                    className={location.pathname === `/profile/${user.id}` ? activeClass : inactiveClass}
+                                >
+                                    Perfil
+                                </Link>
                             )}
-                            
+
                             {user?.role === 'ADMIN' && (
                                 <Link to="/admin" className={location.pathname === "/admin" ? activeClass : inactiveClass}>Admin</Link>
                             )}

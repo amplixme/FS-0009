@@ -1,9 +1,12 @@
 import { useState } from "react";
+import ImageUpload from "./common/ImageUpload";
+
+const BIO_MAX_LENGTH = 200;
 
 const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmitting, error }) => {
   const [name, setName] = useState(initialData?.name || "");
   const [bio, setBio] = useState(initialData?.bio || "");
-  const [avatarUrl, setAvatarUrl] = useState(initialData?.avatarUrl);
+  const [avatarUrl, setAvatarUrl] = useState(initialData?.avatarUrl || null);
 
   if (!isOpen) return null;
 
@@ -19,7 +22,7 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
         {/* Header */}
         <div className="flex items-center justify-between px-8 py-6 border-b border-outline-variant/20">
           <h2 className="text-xl font-bold text-on-surface">
-            {mode === "create" ? "Crear nuevo usuario" : "Editar usuario"}
+            {mode === "create" ? "Crear perfil" : "Editar perfil"}
           </h2>
           <button
             type="button"
@@ -32,6 +35,13 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
+          <div>
+            <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">
+              Avatar
+            </label>
+            <ImageUpload value={avatarUrl} onChange={setAvatarUrl} />
+          </div>
+
           <div>
             <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">
               Nombre completo
@@ -48,32 +58,26 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">
-              Biografía
-            </label>
-            <input
-              type="text"
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+                Biografía
+              </label>
+              <span
+                className={`text-xs font-medium ${
+                  bio.length >= BIO_MAX_LENGTH ? "text-error" : "text-on-surface-variant"
+                }`}
+              >
+                {bio.length}/{BIO_MAX_LENGTH}
+              </span>
+            </div>
+            <textarea
               value={bio}
-              onChange={(e) => setBio(e.target.value)}
+              onChange={(e) => setBio(e.target.value.slice(0, BIO_MAX_LENGTH))}
               placeholder="Ej: Desarrollador Full Stack"
-              required
+              rows={3}
+              maxLength={BIO_MAX_LENGTH}
               disabled={isSubmitting}
-              className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/40 disabled:opacity-60"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">
-              Link imagen
-            </label>
-            <input
-              type="text"
-              value={avatarUrl}
-              onChange={(e) => setAvatarUrl(e.target.value)}
-              placeholder="Ej: Ej: https://i.pravatar.cc/300"
-              required
-              disabled={isSubmitting}
-              className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/40 disabled:opacity-60"
+              className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/40 disabled:opacity-60 resize-none"
             />
           </div>
 
@@ -99,8 +103,8 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
                   ? "Creando..."
                   : "Actualizando datos..."
                 : mode === "create"
-                  ? "Crear usuario"
-                  : "Guardar cambios"}
+                ? "Crear perfil"
+                : "Guardar cambios"}
             </button>
           </div>
         </form>

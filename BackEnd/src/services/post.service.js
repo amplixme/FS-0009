@@ -122,6 +122,7 @@ export const getAllPostsService = async (queryParams = {}) => {
         updatedAt: true,
         author: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -190,13 +191,13 @@ export const getPostByIdService = async (id) => {
 };
 
 // Actualizar post
-export const updatePostService = async (id, { title, content, coverImage, published, categoryIds }) => { 
+export const updatePostService = async (id, { title, content, coverImage, published, categoryIds }) => {
   const updatedPost = await prisma.post.update({
     where: { id: Number(id) },
-    data: { 
-      title, 
-      content, 
-      coverImage, 
+    data: {
+      title,
+      content,
+      coverImage,
       published,
       // Reemplaza las categorías vinculadas si vienen en la petición
       ...(categoryIds && {
