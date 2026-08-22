@@ -61,6 +61,56 @@ pnpm start        # modo producción
 > pnpm exec prisma studio
 > ```
 
+## Datos de demo (seed)
+
+El script `BackEnd/prisma/seed.js` crea un dataset completo para demos y presentaciones:
+
+| Recurso     | Cantidad | Detalle                                              |
+| :---------- | :------- | :--------------------------------------------------- |
+| Usuarios    | 4        | 1 ADMIN + 3 USER, con bio y avatar                   |
+| Categorías  | 5        | Tecnología, Diseño, Programación, DevOps, Opinión    |
+| Posts       | 15       | Con cover image; 13 publicados + 2 borradores        |
+| Comentarios | 30       | Distribuidos entre posts y autores                   |
+
+Ejecutarlo desde `BackEnd`:
+```bash
+pnpm run seed
+```
+
+- **Idempotente**: puede correrse múltiples veces; antes de insertar limpia las tablas (`comment` → `post` → `category` → `user`) y deja siempre la BD en el mismo estado.
+- **Contenido realista en español** sobre tecnología, desarrollo y carrera (sin lorem ipsum).
+
+> [!WARNING]
+> El seed **elimina todos los datos existentes** de las tablas User, Post, Category y Comment antes de insertar. No lo corras sobre una base de datos con información que quieras conservar.
+
+### Credenciales de los usuarios demo
+
+Todos los usuarios comparten la misma contraseña para simplificar las demos:
+
+| Email                          | Rol   | Nombre          |
+| :----------------------------- | :---- | :-------------- |
+| `admin@amplifix.dev`           | ADMIN | Laura Giménez   |
+| `david.perez@amplifix.dev`     | USER  | David Pérez     |
+| `marina.torres@amplifix.dev`   | USER  | Marina Torres   |
+| `diego.fernandez@amplifix.dev` | USER  | Diego Fernández |
+
+Contraseña: `demo1234`
+
+> [!CAUTION]
+> Estas credenciales son **solo para desarrollo/demo**. Nunca usarlas en producción.
+
+### Sobre las imágenes (cover images y avatares)
+
+Las imágenes del seed son **URLs públicas de [Unsplash](https://unsplash.com)** servidas desde `images.unsplash.com`, apuntando a fotos estables y con parámetros de optimización (`?auto=format&fit=crop&w=1200&q=80`).
+
+Decisión técnica: se optó por *hotlinking* en lugar de subir los assets a Cloudinary (el servicio de uploads de la app) porque:
+
+1. El seed queda **rápido y determinista**: no hace requests salientes ni consume cuota del bucket.
+2. **No depende de credenciales** de Cloudinary para funcionar (solo de `DATABASE_URL`).
+3. El frontend renderiza cualquier URL en `<img src>` (`PostCard.jsx`, `PostDetail.jsx`), así que no requiere cambios de código.
+
+Si preferís imágenes propias, basta reemplazar las URLs por las de tu bucket de Cloudinary.
+
 # Frontend
 
 1. Ingresar a la carpeta e instalar las dependencias:
@@ -115,6 +165,7 @@ FS-0009/
 │   ├── pnpm-lock.yaml
 │   ├── prisma/
 │   │   ├── schema.prisma
+│   │   ├── seed.js                 # datos de demo (npm run seed)
 │   │   └── migrations/
 │   └── src/
 │       ├── app.js
