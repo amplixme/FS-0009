@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const generateSlug = (text) => {
   return text
@@ -15,6 +15,19 @@ const CategoryFormModal = ({ isOpen, mode, initialData, onClose, onSubmit, isSav
   const [name, setName] = useState(() => initialData?.name || '');
   const [slug, setSlug] = useState(() => initialData?.slug || '');
   const [slugEditedManually, setSlugEditedManually] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -38,9 +51,14 @@ const CategoryFormModal = ({ isOpen, mode, initialData, onClose, onSubmit, isSav
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 sm:p-4">
-      <div className="bg-surface-container-lowest rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-md p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-6 max-h-[90dvh] overflow-y-auto">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="category-modal-title"
+        className="bg-surface-container-lowest rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-md p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-6 max-h-[90dvh] overflow-y-auto"
+      >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-on-surface">
+          <h2 id="category-modal-title" className="text-xl font-bold text-on-surface">
             {mode === 'edit' ? 'Editar categoría' : 'Crear nueva categoría'}
           </h2>
           <button onClick={onClose} className="text-outline hover:text-on-surface">

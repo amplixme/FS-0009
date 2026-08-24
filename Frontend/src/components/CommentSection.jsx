@@ -109,9 +109,9 @@ const CommentSection = ({ postId }) => {
 
   return (
     <section className="max-w-[720px] mx-auto mt-16 pt-8 border-t border-outline-variant/20">
-      <h3 className="text-2xl font-bold text-on-surface mb-6">
+      <h2 className="text-2xl font-bold text-on-surface mb-6">
         Comentarios{comments.length > 0 && ` (${comments.length})`}
-      </h3>
+      </h2>
 
       {loading ? (
         <Spinner size="md" text="Cargando comentarios..." />

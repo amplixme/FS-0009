@@ -190,9 +190,9 @@ const PostDetail = () => {
             <div className="bg-surface-container-low rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4 text-primary">
                 <span className="material-symbols-outlined">list_alt</span>
-                <h4 className="font-bold uppercase tracking-wider text-xs">
+                <h3 className="font-bold uppercase tracking-wider text-xs">
                   Tabla de contenidos
-                </h4>
+                </h3>
               </div>
               <nav className="flex flex-col gap-3 font-medium text-on-surface-variant">
                 <span className="flex items-center gap-2 text-on-surface-variant/60">
