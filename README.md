@@ -111,6 +111,12 @@ Decisión técnica: se optó por *hotlinking* en lugar de subir los assets a Clo
 
 Si preferís imágenes propias, basta reemplazar las URLs por las de tu bucket de Cloudinary.
 
+# URL Backend en Render
+
+```bash
+https://fs-0009.onrender.com
+```
+
 # Frontend
 
 1. Ingresar a la carpeta e instalar las dependencias:
