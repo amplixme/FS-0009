@@ -231,7 +231,7 @@ const Register = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-slate-600"
                 aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               >
                 <span className="material-symbols-outlined text-xl">
@@ -274,7 +274,7 @@ const Register = () => {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-slate-600"
                 aria-label={showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               >
                 <span className="material-symbols-outlined text-xl">
@@ -330,12 +330,12 @@ const Register = () => {
 
       <footer className="mt-12 w-full max-w-[420px] text-center px-8">
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4">
-          <a className="text-xs font-medium text-slate-400 hover:text-primary transition-colors" href="#">Sobre nosotros</a>
-          <a className="text-xs font-medium text-slate-400 hover:text-primary transition-colors" href="#">Ayuda</a>
-          <a className="text-xs font-medium text-slate-400 hover:text-primary transition-colors" href="#">Blog</a>
-          <a className="text-xs font-medium text-slate-400 hover:text-primary transition-colors" href="#">Contacto</a>
+          <a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Sobre nosotros</a>
+          <a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Ayuda</a>
+          <a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Blog</a>
+          <a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Contacto</a>
         </div>
-        <p className="text-[11px] text-slate-400 uppercase tracking-widest font-semibold opacity-60">© 2024 TuProyecto. Editorial Authority.</p>
+        <p className="text-[11px] text-on-surface-variant uppercase tracking-widest font-semibold">© 2024 TuProyecto. Editorial Authority.</p>
       </footer>
 
     </div>

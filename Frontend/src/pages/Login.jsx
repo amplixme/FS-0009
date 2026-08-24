@@ -229,11 +229,11 @@ const Login = () => {
         </div>
 
         {/* System Credits/Language */}
-        <div className="mt-8 flex flex-wrap justify-center gap-6 px-4 md:px-0 opacity-60">
-          <p className="text-xs font-medium text-outline uppercase tracking-widest">© 2024 TuProyecto</p>
+        <div className="mt-8 flex flex-wrap justify-center gap-6 px-4 md:px-0">
+          <p className="text-xs font-medium text-on-surface-variant uppercase tracking-widest">© 2024 TuProyecto</p>
           <div className="flex gap-4">
-            <a className="text-xs font-semibold text-outline hover:text-primary transition-colors" href="#">Privacidad</a>
-            <a className="text-xs font-semibold text-outline hover:text-primary transition-colors" href="#">Términos</a>
+            <a className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidad</a>
+            <a className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors" href="#">Términos</a>
           </div>
         </div>
       </main>

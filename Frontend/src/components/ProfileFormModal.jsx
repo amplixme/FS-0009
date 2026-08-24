@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ImageUpload from "./common/ImageUpload";
 
 const BIO_MAX_LENGTH = 200;
@@ -7,6 +7,19 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
   const [name, setName] = useState(initialData?.name || "");
   const [bio, setBio] = useState(initialData?.bio || "");
   const [avatarUrl, setAvatarUrl] = useState(initialData?.avatarUrl || null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onCancel();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onCancel]);
 
   if (!isOpen) return null;
 
@@ -18,10 +31,15 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="profile-modal-title"
+        className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden"
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-8 py-6 border-b border-outline-variant/20">
-          <h2 className="text-xl font-bold text-on-surface">
+          <h2 id="profile-modal-title" className="text-xl font-bold text-on-surface">
             {mode === "create" ? "Crear perfil" : "Editar perfil"}
           </h2>
           <button

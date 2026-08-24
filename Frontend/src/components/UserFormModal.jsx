@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmitting, error }) => {
   const [name, setName] = useState(initialData?.name || "");
   const [email, setEmail] = useState(initialData?.email || "");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState(initialData?.role || "USER");
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onCancel();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onCancel]);
 
   if (!isOpen) return null;
 
@@ -19,10 +32,15 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
 
   return (
     <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/40">
-      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-md overflow-hidden max-h-[90dvh] flex flex-col pb-[env(safe-area-inset-bottom)]">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="user-modal-title"
+        className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-md overflow-hidden max-h-[90dvh] flex flex-col pb-[env(safe-area-inset-bottom)]"
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-8 py-6 border-b border-outline-variant/20">
-          <h2 className="text-xl font-bold text-on-surface">
+          <h2 id="user-modal-title" className="text-xl font-bold text-on-surface">
             {mode === "create" ? "Crear nuevo usuario" : "Editar usuario"}
           </h2>
           <button
