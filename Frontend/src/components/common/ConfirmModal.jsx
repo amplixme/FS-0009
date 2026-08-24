@@ -49,7 +49,9 @@ const ConfirmModal = ({
           >
             {danger ? 'warning' : 'info'}
           </span>
-          <h3 id="confirm-modal-title" className="text-lg font-bold text-on-surface">{title}</h3>
+          <h3 id="confirm-modal-title" className="text-lg font-bold text-on-surface">
+            {title}
+          </h3>
         </div>
 
         <p className="text-on-surface-variant mb-6">{message}</p>

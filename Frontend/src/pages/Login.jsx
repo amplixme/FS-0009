@@ -8,7 +8,6 @@ const Login = () => {
   const location = useLocation();
   const { login } = useAuth();
 
-
   const successMessage = location.state?.successMessage;
 
   // form data
@@ -24,16 +23,14 @@ const Login = () => {
   // loading state para evitar multiples envios
   const [loading, setLoading] = useState(false);
 
-
   const [showPassword, setShowPassword] = useState(false);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Validación client-side 
+  // Validación client-side
   const validate = () => {
     const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,7 +67,8 @@ const Login = () => {
       // redirige a la home page
       navigate('/');
     } catch (error) {
-      const message = error.response?.data?.error?.message || 'Credenciales inválidas. Intentá de nuevo.';
+      const message =
+        error.response?.data?.error?.message || 'Credenciales inválidas. Intentá de nuevo.';
       setServerError(message);
     } finally {
       setLoading(false);
@@ -88,18 +86,17 @@ const Login = () => {
 
       {/* Login Container */}
       <main className="w-full max-w-[420px] mx-auto">
-
         {/* Main Card */}
         <div className="bg-surface-container-lowest w-full min-h-screen md:min-h-fit md:rounded-[16px] shadow-xl overflow-hidden transition-all duration-300">
-
           {/* Franja decorativa superior */}
           <div className="h-1.5 w-full bg-gradient-to-r from-primary to-secondary-container" />
 
           <div className="px-8 pt-12 pb-10 md:px-10">
-
             {/* Brand Anchor */}
             <div className="mb-10 text-center md:text-left">
-              <span className="text-2xl font-extrabold tracking-tighter text-primary">TuProyecto</span>
+              <span className="text-2xl font-extrabold tracking-tighter text-primary">
+                TuProyecto
+              </span>
             </div>
 
             {/* Header Content */}
@@ -107,9 +104,7 @@ const Login = () => {
               <h1 className="text-[28px] font-bold text-on-surface leading-tight tracking-tight mb-2">
                 Iniciar sesión
               </h1>
-              <p className="text-on-surface-variant">
-                Ingresa a tu cuenta para continuar
-              </p>
+              <p className="text-on-surface-variant">Ingresa a tu cuenta para continuar</p>
             </header>
 
             {/* Mensaje de éxito, si viene desde Register */}
@@ -120,7 +115,6 @@ const Login = () => {
             )}
 
             <form className="space-y-6" onSubmit={handleSubmit} noValidate>
-
               {/* Email Field */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-on-surface ml-1" htmlFor="email">
@@ -149,8 +143,11 @@ const Login = () => {
                   <label className="block text-sm font-semibold text-on-surface" htmlFor="password">
                     Contraseña
                   </label>
-                 
-                  <a className="text-sm font-semibold text-primary hover:text-on-primary-fixed-variant transition-colors" href="#">
+
+                  <a
+                    className="text-sm font-semibold text-primary hover:text-on-primary-fixed-variant transition-colors"
+                    href="#"
+                  >
                     ¿Olvidaste tu contraseña?
                   </a>
                 </div>
@@ -220,7 +217,10 @@ const Login = () => {
             <footer className="mt-10 text-center">
               <p className="text-on-surface-variant font-medium">
                 ¿No tienes cuenta?{' '}
-                <Link className="text-primary font-bold hover:underline underline-offset-4 decoration-2 ml-1" to="/register">
+                <Link
+                  className="text-primary font-bold hover:underline underline-offset-4 decoration-2 ml-1"
+                  to="/register"
+                >
                   Regístrate
                 </Link>
               </p>
@@ -230,10 +230,22 @@ const Login = () => {
 
         {/* System Credits/Language */}
         <div className="mt-8 flex flex-wrap justify-center gap-6 px-4 md:px-0">
-          <p className="text-xs font-medium text-on-surface-variant uppercase tracking-widest">© 2024 TuProyecto</p>
+          <p className="text-xs font-medium text-on-surface-variant uppercase tracking-widest">
+            © 2024 TuProyecto
+          </p>
           <div className="flex gap-4">
-            <a className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidad</a>
-            <a className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors" href="#">Términos</a>
+            <a
+              className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors"
+              href="#"
+            >
+              Privacidad
+            </a>
+            <a
+              className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors"
+              href="#"
+            >
+              Términos
+            </a>
           </div>
         </div>
       </main>

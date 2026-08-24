@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { getAll } from '../services/post.service';
 import userService from '../services/user.service';
 import PostCard from '../components/PostCard';
-import Spinner from '../components/common/Spinner'
+import Spinner from '../components/common/Spinner';
 import ProfileFormModal from '../components/ProfileFormModal';
 import { AuthContext } from '../context/AuthContextInstance';
 
@@ -20,16 +20,15 @@ const Profile = () => {
   const [editTarget, setEditTarget] = useState(null);
 
   useEffect(() => {
-
     const getProfile = async () => {
       try {
-        await userService.getProfile(id).then(data => {
-          setProfile(data)
+        await userService.getProfile(id).then((data) => {
+          setProfile(data);
         });
       } catch (error) {
         setError(error.message);
       }
-    }
+    };
     getProfile();
   }, [id]);
 
@@ -41,7 +40,7 @@ const Profile = () => {
         setError(null);
 
         const response = await getAll({ limit: 100 });
-        const userPosts = response.data.filter(post => post.author.id === profile.id);
+        const userPosts = response.data.filter((post) => post.author.id === profile.id);
         setPosts(userPosts);
       } catch (err) {
         setError(err.message);
@@ -59,12 +58,16 @@ const Profile = () => {
     try {
       setIsEditing(true);
       setEditError(null);
-      await userService.updateProfile(data)
+      await userService.updateProfile(data);
       setEditTarget(null);
       const updatedData = await userService.getProfile(id);
       setProfile(updatedData);
       if (isOwnProfile) {
-        updateUser({ name: updatedData.name, bio: updatedData.bio, avatarUrl: updatedData.avatarUrl });
+        updateUser({
+          name: updatedData.name,
+          bio: updatedData.bio,
+          avatarUrl: updatedData.avatarUrl,
+        });
       }
     } catch (err) {
       setEditError(err.message);
@@ -84,14 +87,22 @@ const Profile = () => {
           {/* Avatar del usuario*/}
           <div className="relative flex-shrink-0">
             <div className="w-[120px] h-[120px] rounded-full overflow-hidden border-4 border-surface-container-low">
-              <img src={profile.avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
+              <img
+                src={profile.avatarUrl}
+                alt={profile.name}
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
 
           <div className="flex-grow text-center md:text-left space-y-4">
             <div>
-              <h1 className="text-[28px] font-extrabold text-on-surface tracking-tight">{profile.name}</h1>
-              <p className="text-[1.125rem] text-on-surface-variant font-medium mt-1">{profile.bio}</p>
+              <h1 className="text-[28px] font-extrabold text-on-surface tracking-tight">
+                {profile.name}
+              </h1>
+              <p className="text-[1.125rem] text-on-surface-variant font-medium mt-1">
+                {profile.bio}
+              </p>
             </div>
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm font-medium text-slate-500">
@@ -146,7 +157,7 @@ const Profile = () => {
       </section>
 
       <ProfileFormModal
-        key={editTarget ? `edit-${editTarget.id}` : "edit-closed"}
+        key={editTarget ? `edit-${editTarget.id}` : 'edit-closed'}
         isOpen={Boolean(editTarget)}
         mode="edit"
         initialData={editTarget}
@@ -156,7 +167,7 @@ const Profile = () => {
         error={editError}
       />
     </>
-  )
-}
+  );
+};
 
 export default Profile;

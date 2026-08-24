@@ -1,11 +1,19 @@
-import { useState, useEffect } from "react";
-import ImageUpload from "./common/ImageUpload";
+import { useState, useEffect } from 'react';
+import ImageUpload from './common/ImageUpload';
 
 const BIO_MAX_LENGTH = 200;
 
-const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmitting, error }) => {
-  const [name, setName] = useState(initialData?.name || "");
-  const [bio, setBio] = useState(initialData?.bio || "");
+const ProfileFormModal = ({
+  isOpen,
+  mode,
+  initialData,
+  onSubmit,
+  onCancel,
+  isSubmitting,
+  error,
+}) => {
+  const [name, setName] = useState(initialData?.name || '');
+  const [bio, setBio] = useState(initialData?.bio || '');
   const [avatarUrl, setAvatarUrl] = useState(initialData?.avatarUrl || null);
 
   useEffect(() => {
@@ -40,7 +48,7 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
         {/* Header */}
         <div className="flex items-center justify-between px-8 py-6 border-b border-outline-variant/20">
           <h2 id="profile-modal-title" className="text-xl font-bold text-on-surface">
-            {mode === "create" ? "Crear perfil" : "Editar perfil"}
+            {mode === 'create' ? 'Crear perfil' : 'Editar perfil'}
           </h2>
           <button
             type="button"
@@ -82,7 +90,7 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
               </label>
               <span
                 className={`text-xs font-medium ${
-                  bio.length >= BIO_MAX_LENGTH ? "text-error" : "text-on-surface-variant"
+                  bio.length >= BIO_MAX_LENGTH ? 'text-error' : 'text-on-surface-variant'
                 }`}
               >
                 {bio.length}/{BIO_MAX_LENGTH}
@@ -117,12 +125,12 @@ const ProfileFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSub
               className="px-6 py-2.5 rounded-full bg-primary text-on-primary font-semibold hover:bg-primary/90 transition-all disabled:opacity-60"
             >
               {isSubmitting
-                ? mode === "create"
-                  ? "Creando..."
-                  : "Actualizando datos..."
-                : mode === "create"
-                ? "Crear perfil"
-                : "Guardar cambios"}
+                ? mode === 'create'
+                  ? 'Creando...'
+                  : 'Actualizando datos...'
+                : mode === 'create'
+                  ? 'Crear perfil'
+                  : 'Guardar cambios'}
             </button>
           </div>
         </form>

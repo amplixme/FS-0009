@@ -3,23 +3,23 @@
  * Obtiene el post por ID de la URL, muestra contenido completo,
  * y botones Editar/Eliminar solo si el usuario es el autor.
  */
-import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { getById, deletePost } from "../services/post.service";
-import { useAuth } from "../context/useAuth";
-import Spinner from "../components/common/Spinner";
-import ErrorMessage from "../components/common/ErrorMessage";
-import EmptyState from "../components/common/EmptyState";
-import ConfirmModal from "../components/common/ConfirmModal";
-import Toast from "../components/common/Toast";
-import CommentSection from "../components/CommentSection";
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { getById, deletePost } from '../services/post.service';
+import { useAuth } from '../context/useAuth';
+import Spinner from '../components/common/Spinner';
+import ErrorMessage from '../components/common/ErrorMessage';
+import EmptyState from '../components/common/EmptyState';
+import ConfirmModal from '../components/common/ConfirmModal';
+import Toast from '../components/common/Toast';
+import CommentSection from '../components/CommentSection';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString("es-AR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
+  return date.toLocaleDateString('es-AR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
   });
 };
 
@@ -34,8 +34,8 @@ const PostDetail = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [toast, setToast] = useState({
     visible: false,
-    message: "",
-    type: "success",
+    message: '',
+    type: 'success',
   });
 
   useEffect(() => {
@@ -69,12 +69,12 @@ const PostDetail = () => {
         icon="article"
         message="Post no encontrado"
         actionLabel="Volver a inicio"
-        onAction={() => navigate("/")}
+        onAction={() => navigate('/')}
       />
     );
   }
 
-  const authorName = post.author?.name || "Autor desconocido";
+  const authorName = post.author?.name || 'Autor desconocido';
   const isAuthor = user && user.id === post.authorId;
 
   const handleDelete = async () => {
@@ -82,15 +82,15 @@ const PostDetail = () => {
       setIsDeleting(true);
       await deletePost(id);
       setShowDeleteModal(false);
-      navigate("/", {
-        state: { successMessage: "Post eliminado correctamente" },
+      navigate('/', {
+        state: { successMessage: 'Post eliminado correctamente' },
       });
     } catch (err) {
       setShowDeleteModal(false);
       setToast({
         visible: true,
-        message: err.message || "Error al eliminar el post",
-        type: "error",
+        message: err.message || 'Error al eliminar el post',
+        type: 'error',
       });
     } finally {
       setIsDeleting(false);
@@ -104,12 +104,8 @@ const PostDetail = () => {
         <Link to="/" className="hover:text-primary transition-colors">
           Inicio
         </Link>
-        <span className="material-symbols-outlined text-[16px]">
-          chevron_right
-        </span>
-        <span className="font-medium text-on-surface truncate">
-          {post.title}
-        </span>
+        <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+        <span className="font-medium text-on-surface truncate">{post.title}</span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -164,18 +160,14 @@ const PostDetail = () => {
                 to={`/posts/${post.id}/edit`}
                 className="flex items-center gap-2 px-5 py-2 rounded-full border border-outline text-on-surface hover:bg-surface-container transition-all text-sm font-semibold"
               >
-                <span className="material-symbols-outlined text-[20px]">
-                  edit
-                </span>
+                <span className="material-symbols-outlined text-[20px]">edit</span>
                 Editar
               </Link>
               <button
                 onClick={() => setShowDeleteModal(true)}
                 className="flex items-center gap-2 px-5 py-2 rounded-full border border-error text-error hover:bg-error-container transition-all text-sm font-semibold"
               >
-                <span className="material-symbols-outlined text-[20px]">
-                  delete
-                </span>
+                <span className="material-symbols-outlined text-[20px]">delete</span>
                 Eliminar
               </button>
             </div>
@@ -190,9 +182,7 @@ const PostDetail = () => {
             <div className="bg-surface-container-low rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4 text-primary">
                 <span className="material-symbols-outlined">list_alt</span>
-                <h3 className="font-bold uppercase tracking-wider text-xs">
-                  Tabla de contenidos
-                </h3>
+                <h3 className="font-bold uppercase tracking-wider text-xs">Tabla de contenidos</h3>
               </div>
               <nav className="flex flex-col gap-3 font-medium text-on-surface-variant">
                 <span className="flex items-center gap-2 text-on-surface-variant/60">
@@ -225,7 +215,7 @@ const PostDetail = () => {
         isOpen={showDeleteModal}
         title="Eliminar publicación"
         message="¿Estás seguro de que deseas eliminar esta publicación? Esta acción no se puede deshacer."
-        confirmLabel={isDeleting ? "Eliminando..." : "Eliminar"}
+        confirmLabel={isDeleting ? 'Eliminando...' : 'Eliminar'}
         cancelLabel="Cancelar"
         onConfirm={handleDelete}
         onCancel={() => setShowDeleteModal(false)}

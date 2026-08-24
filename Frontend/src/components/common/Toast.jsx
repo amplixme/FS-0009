@@ -4,13 +4,7 @@
  */
 import { useEffect } from 'react';
 
-const Toast = ({
-  message,
-  type = 'success',
-  isVisible,
-  onClose,
-  duration = 4000,
-}) => {
+const Toast = ({ message, type = 'success', isVisible, onClose, duration = 4000 }) => {
   useEffect(() => {
     if (isVisible && duration > 0) {
       const timer = setTimeout(() => {
@@ -49,10 +43,7 @@ const Toast = ({
       >
         <span className="material-symbols-outlined text-lg">{s.icon}</span>
         <span className="font-medium text-sm">{message}</span>
-        <button
-          onClick={onClose}
-          className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
-        >
+        <button onClick={onClose} className="ml-2 opacity-70 hover:opacity-100 transition-opacity">
           <span className="material-symbols-outlined text-lg">close</span>
         </button>
       </div>

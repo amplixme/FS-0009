@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 
-
 class PasswordValidator {
   static MIN_LENGTH = 8;
 
@@ -29,7 +28,6 @@ class PasswordValidator {
     return /[^A-Za-z0-9]/.test(this.password);
   }
 
-
   getRawScore() {
     let score = 0;
     if (this.hasMinLength()) score++;
@@ -39,7 +37,6 @@ class PasswordValidator {
     return score;
   }
 
-  
   getStrengthLevel() {
     const score = this.getRawScore();
     if (score <= 1) return 0; // Débil
@@ -55,7 +52,6 @@ class PasswordValidator {
   getStrengthColor() {
     return PasswordValidator.STRENGTH_COLORS[this.getStrengthLevel()];
   }
-
 
   isValid() {
     return this.hasMinLength();
@@ -77,7 +73,7 @@ const Register = () => {
     confirmPassword: '',
   });
 
-  // validacion y error 
+  // validacion y error
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
 
@@ -94,13 +90,12 @@ const Register = () => {
   // comparacion contraseña
   const passwordValidator = new PasswordValidator(formData.password);
 
-  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // validacion client-side 
+  // validacion client-side
   const validate = () => {
     const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -148,7 +143,8 @@ const Register = () => {
         state: { successMessage: 'Cuenta creada con éxito. Ya podés iniciar sesión.' },
       });
     } catch (error) {
-      const message = error.response?.data?.message || 'Ocurrió un error al crear la cuenta. Intentá de nuevo.';
+      const message =
+        error.response?.data?.message || 'Ocurrió un error al crear la cuenta. Intentá de nuevo.';
       setServerError(message);
     } finally {
       setLoading(false);
@@ -164,25 +160,29 @@ const Register = () => {
         }
       `}</style>
 
-
       <header className="mb-8 hidden md:block">
         <h1 className="text-3xl font-extrabold tracking-tighter text-slate-900">TuProyecto</h1>
       </header>
 
       <main className="w-full max-w-[420px] bg-white md:rounded-[16px] shadow-xl md:shadow-slate-200/50 overflow-hidden flex flex-col">
         <div className="px-8 pt-10 pb-6 text-center">
-          <h1 className="md:hidden text-2xl font-extrabold tracking-tighter text-slate-900 mb-6">TuProyecto</h1>
+          <h1 className="md:hidden text-2xl font-extrabold tracking-tighter text-slate-900 mb-6">
+            TuProyecto
+          </h1>
           <h2 className="text-2xl font-bold tracking-tight text-on-surface">Crear cuenta</h2>
           <p className="text-slate-500 mt-2 text-sm">Únete a la comunidad</p>
         </div>
 
         <form className="px-8 pb-10 flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
-
           {/* Nombre completo */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700 ml-1" htmlFor="name">Nombre completo</label>
+            <label className="text-sm font-medium text-slate-700 ml-1" htmlFor="name">
+              Nombre completo
+            </label>
             <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">person</span>
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">
+                person
+              </span>
               <input
                 className="w-full pl-10 pr-4 py-3 bg-slate-50 border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-slate-900 placeholder:text-slate-400"
                 id="name"
@@ -198,9 +198,13 @@ const Register = () => {
 
           {/* Email */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700 ml-1" htmlFor="email">Correo electrónico</label>
+            <label className="text-sm font-medium text-slate-700 ml-1" htmlFor="email">
+              Correo electrónico
+            </label>
             <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">mail</span>
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">
+                mail
+              </span>
               <input
                 className="w-full pl-10 pr-4 py-3 bg-slate-50 border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-slate-900 placeholder:text-slate-400"
                 id="email"
@@ -216,9 +220,13 @@ const Register = () => {
 
           {/* Contraseña */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700 ml-1" htmlFor="password">Contraseña</label>
+            <label className="text-sm font-medium text-slate-700 ml-1" htmlFor="password">
+              Contraseña
+            </label>
             <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">lock</span>
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">
+                lock
+              </span>
               <input
                 className="w-full pl-10 pr-12 py-3 bg-slate-50 border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-slate-900 placeholder:text-slate-400"
                 id="password"
@@ -241,7 +249,6 @@ const Register = () => {
             </div>
             {errors.password && <p className="text-error text-xs ml-1">{errors.password}</p>}
 
-
             {formData.password && (
               <div className="mt-2 flex items-center gap-2 px-1">
                 {[0, 1, 2].map((level) => (
@@ -259,9 +266,13 @@ const Register = () => {
 
           {/* Confirmar contraseña */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700 ml-1" htmlFor="confirmPassword">Confirmar contraseña</label>
+            <label className="text-sm font-medium text-slate-700 ml-1" htmlFor="confirmPassword">
+              Confirmar contraseña
+            </label>
             <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">enhanced_encryption</span>
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">
+                enhanced_encryption
+              </span>
               <input
                 className="w-full pl-10 pr-12 py-3 bg-slate-50 border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-slate-900 placeholder:text-slate-400"
                 id="confirmPassword"
@@ -282,7 +293,9 @@ const Register = () => {
                 </span>
               </button>
             </div>
-            {errors.confirmPassword && <p className="text-error text-xs ml-1">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && (
+              <p className="text-error text-xs ml-1">{errors.confirmPassword}</p>
+            )}
           </div>
 
           {/* Términos y condiciones */}
@@ -295,10 +308,20 @@ const Register = () => {
                   checked={acceptedTerms}
                   onChange={(e) => setAcceptedTerms(e.target.checked)}
                 />
-                <span className="material-symbols-outlined absolute text-white text-sm scale-0 peer-checked:scale-100 transition-transform pointer-events-none">check</span>
+                <span className="material-symbols-outlined absolute text-white text-sm scale-0 peer-checked:scale-100 transition-transform pointer-events-none">
+                  check
+                </span>
               </div>
               <span className="text-xs text-slate-500 leading-tight">
-                Acepto los <a className="text-primary font-semibold hover:underline" href="#">Términos y Condiciones</a> y la <a className="text-primary font-semibold hover:underline" href="#">Política de Privacidad</a> de TuProyecto.
+                Acepto los{' '}
+                <a className="text-primary font-semibold hover:underline" href="#">
+                  Términos y Condiciones
+                </a>{' '}
+                y la{' '}
+                <a className="text-primary font-semibold hover:underline" href="#">
+                  Política de Privacidad
+                </a>{' '}
+                de TuProyecto.
               </span>
             </label>
             {errors.terms && <p className="text-error text-xs ml-1 mt-1">{errors.terms}</p>}
@@ -313,7 +336,6 @@ const Register = () => {
           </button>
         </form>
 
-
         {serverError && (
           <div className="mx-8 mb-6 bg-error-container text-on-error-container text-sm px-4 py-3 rounded-xl">
             {serverError}
@@ -322,22 +344,45 @@ const Register = () => {
 
         <div className="bg-slate-50 py-6 px-8 text-center border-t border-slate-100">
           <p className="text-sm text-slate-600">
-            ¿Ya tenés cuenta? <Link className="text-primary font-bold hover:underline" to="/login">Inicia sesión</Link>
+            ¿Ya tenés cuenta?{' '}
+            <Link className="text-primary font-bold hover:underline" to="/login">
+              Inicia sesión
+            </Link>
           </p>
         </div>
       </main>
 
-
       <footer className="mt-12 w-full max-w-[420px] text-center px-8">
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4">
-          <a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Sobre nosotros</a>
-          <a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Ayuda</a>
-          <a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Blog</a>
-          <a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Contacto</a>
+          <a
+            className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors"
+            href="#"
+          >
+            Sobre nosotros
+          </a>
+          <a
+            className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors"
+            href="#"
+          >
+            Ayuda
+          </a>
+          <a
+            className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors"
+            href="#"
+          >
+            Blog
+          </a>
+          <a
+            className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors"
+            href="#"
+          >
+            Contacto
+          </a>
         </div>
-        <p className="text-[11px] text-on-surface-variant uppercase tracking-widest font-semibold">© 2024 TuProyecto. Editorial Authority.</p>
+        <p className="text-[11px] text-on-surface-variant uppercase tracking-widest font-semibold">
+          © 2024 TuProyecto. Editorial Authority.
+        </p>
       </footer>
-
     </div>
   );
 };

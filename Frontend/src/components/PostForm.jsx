@@ -102,7 +102,10 @@ const PostForm = ({
           <span className="text-sm font-medium text-on-surface-variant">Drafting Article</span>
         </div>
         <div className="flex items-center gap-3">
-          <button type="button" className="px-5 py-2 rounded-full border border-primary text-primary font-semibold text-sm hover:bg-primary/5 transition-colors duration-200">
+          <button
+            type="button"
+            className="px-5 py-2 rounded-full border border-primary text-primary font-semibold text-sm hover:bg-primary/5 transition-colors duration-200"
+          >
             Preview
           </button>
         </div>
@@ -175,7 +178,9 @@ const PostForm = ({
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-6 bg-surface-container-low rounded-xl">
             <div>
               <h4 className="font-bold text-on-surface">Visibilidad y Programación</h4>
-              <p className="text-sm text-on-surface-variant">Configura cuándo será visible este artículo para tus lectores.</p>
+              <p className="text-sm text-on-surface-variant">
+                Configura cuándo será visible este artículo para tus lectores.
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm font-medium text-on-surface">Publicar ahora</span>
@@ -184,7 +189,9 @@ const PostForm = ({
                   className="sr-only peer"
                   type="checkbox"
                   checked={formData.published}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, published: e.target.checked }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, published: e.target.checked }))
+                  }
                 />
                 <div className="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
               </label>
@@ -201,7 +208,11 @@ const PostForm = ({
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <button type="button" onClick={handleDiscard} className="text-[10px] uppercase tracking-widest font-bold text-error hover:text-error/80 transition-all duration-200 ease-in-out">
+            <button
+              type="button"
+              onClick={handleDiscard}
+              className="text-[10px] uppercase tracking-widest font-bold text-error hover:text-error/80 transition-all duration-200 ease-in-out"
+            >
               Descartar
             </button>
             <div className="h-4 w-px bg-outline-variant/20"></div>
