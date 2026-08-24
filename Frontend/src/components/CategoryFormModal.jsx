@@ -11,7 +11,15 @@ const generateSlug = (text) => {
     .replace(/-+/g, '-'); // colapsa guiones repetidos
 };
 
-const CategoryFormModal = ({ isOpen, mode, initialData, onClose, onSubmit, isSaving, serverError }) => {
+const CategoryFormModal = ({
+  isOpen,
+  mode,
+  initialData,
+  onClose,
+  onSubmit,
+  isSaving,
+  serverError,
+}) => {
   const [name, setName] = useState(() => initialData?.name || '');
   const [slug, setSlug] = useState(() => initialData?.slug || '');
   const [slugEditedManually, setSlugEditedManually] = useState(false);
@@ -96,9 +104,7 @@ const CategoryFormModal = ({ isOpen, mode, initialData, onClose, onSubmit, isSav
             <p className="text-xs text-outline mt-1">Solo minúsculas, números y guiones.</p>
           </div>
 
-          {serverError && (
-            <p className="text-error text-sm font-semibold mb-4">{serverError}</p>
-          )}
+          {serverError && <p className="text-error text-sm font-semibold mb-4">{serverError}</p>}
 
           <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
             <button

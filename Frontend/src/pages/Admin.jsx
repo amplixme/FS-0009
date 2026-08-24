@@ -1,17 +1,27 @@
-import { useState, useEffect } from "react";
-import { getStats, getAllUsers, updateUserRole, deleteUser, createUser, updateUser, deletePost, getAllComments, deleteComment } from "../services/admin.service";
-import { getAll as getAllPosts } from "../services/post.service";
-import { useAuth } from "../context/useAuth";
-import Spinner from "../components/common/Spinner";
-import ConfirmModal from "../components/common/ConfirmModal";
-import UserFormModal from "../components/UserFormModal";
+import { useState, useEffect } from 'react';
+import {
+  getStats,
+  getAllUsers,
+  updateUserRole,
+  deleteUser,
+  createUser,
+  updateUser,
+  deletePost,
+  getAllComments,
+  deleteComment,
+} from '../services/admin.service';
+import { getAll as getAllPosts } from '../services/post.service';
+import { useAuth } from '../context/useAuth';
+import Spinner from '../components/common/Spinner';
+import ConfirmModal from '../components/common/ConfirmModal';
+import UserFormModal from '../components/UserFormModal';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString("es-AR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
+  return date.toLocaleDateString('es-AR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
   });
 };
 
@@ -88,7 +98,7 @@ const Admin = () => {
   }, []);
 
   const handleConfirmRoleChange = async () => {
-    const newRole = roleTarget.role === "ADMIN" ? "USER" : "ADMIN";
+    const newRole = roleTarget.role === 'ADMIN' ? 'USER' : 'ADMIN';
 
     try {
       setIsChangingRole(true);
@@ -180,9 +190,7 @@ const Admin = () => {
         <h1 className="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
           Panel de Administración
         </h1>
-        <p className="text-on-surface-variant">
-          Gestión general de la plataforma y usuarios.
-        </p>
+        <p className="text-on-surface-variant">Gestión general de la plataforma y usuarios.</p>
       </div>
 
       {loading ? (
@@ -195,52 +203,34 @@ const Admin = () => {
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-2">
               <div className="flex justify-between items-start">
-                <span className="text-on-surface-variant font-medium text-sm">
-                  Usuarios
-                </span>
-                <span className="material-symbols-outlined text-primary">
-                  people
-                </span>
+                <span className="text-on-surface-variant font-medium text-sm">Usuarios</span>
+                <span className="material-symbols-outlined text-primary">people</span>
               </div>
-              <div className="text-[36px] font-bold leading-tight">
-                {stats.totalUsers}
-              </div>
+              <div className="text-[36px] font-bold leading-tight">{stats.totalUsers}</div>
             </div>
 
             <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-2">
               <div className="flex justify-between items-start">
-                <span className="text-on-surface-variant font-medium text-sm">
-                  Posts
-                </span>
-                <span className="material-symbols-outlined text-primary">
-                  description
-                </span>
+                <span className="text-on-surface-variant font-medium text-sm">Posts</span>
+                <span className="material-symbols-outlined text-primary">description</span>
               </div>
-              <div className="text-[36px] font-bold leading-tight">
-                {stats.totalPosts}
-              </div>
+              <div className="text-[36px] font-bold leading-tight">{stats.totalPosts}</div>
               {stats.postsToday > 0 && (
                 <div className="text-xs text-secondary flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[14px]">
-                    add
+                  <span className="material-symbols-outlined text-[14px]">add</span>
+                  <span>
+                    {stats.postsToday} nuevo{stats.postsToday !== 1 ? 's' : ''} hoy
                   </span>
-                  <span>{stats.postsToday} nuevo{stats.postsToday !== 1 ? "s" : ""} hoy</span>
                 </div>
               )}
             </div>
 
             <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-2">
               <div className="flex justify-between items-start">
-                <span className="text-on-surface-variant font-medium text-sm">
-                  Comentarios
-                </span>
-                <span className="material-symbols-outlined text-primary">
-                  chat
-                </span>
+                <span className="text-on-surface-variant font-medium text-sm">Comentarios</span>
+                <span className="material-symbols-outlined text-primary">chat</span>
               </div>
-              <div className="text-[36px] font-bold leading-tight">
-                {stats.totalComments}
-              </div>
+              <div className="text-[36px] font-bold leading-tight">{stats.totalComments}</div>
             </div>
           </section>
 
@@ -255,9 +245,7 @@ const Admin = () => {
                     className="bg-surface-container-low px-4 py-2 rounded-full text-sm flex items-center gap-2"
                   >
                     <span className="font-semibold">{cat.name}</span>
-                    <span className="text-on-surface-variant">
-                      {cat.postCount}
-                    </span>
+                    <span className="text-on-surface-variant">{cat.postCount}</span>
                   </div>
                 ))}
               </div>
@@ -266,152 +254,146 @@ const Admin = () => {
 
           {/* Usuarios + Comentarios recientes, lado a lado */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-12">
-          {/* Sección de usuarios */}
-          <section className="xl:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
-            <div className="p-6 flex items-center justify-between border-b border-surface-container-low">
-              <div className="flex items-center gap-3">
-                <h2 className="text-xl font-bold">Usuarios</h2>
-                <span className="bg-primary/10 text-primary px-2.5 py-0.5 rounded-full text-xs font-bold">
-                  {users.length}
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setShowAllUsers((prev) => !prev)}
-                  className="text-primary text-sm font-semibold hover:underline"
-                >
-                  {showAllUsers ? "Ver menos" : "Ver todos"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCreateError(null);
-                    setIsCreateModalOpen(true);
-                  }}
-                  className="px-4 py-2 bg-primary text-on-primary rounded-full text-sm font-semibold hover:bg-primary/90 transition-colors"
-                >
-                  Nuevo usuario
-                </button>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-surface-container-low text-on-surface-variant uppercase text-[11px] font-bold tracking-wider">
-                  <tr>
-                    <th className="px-6 py-4">Nombre</th>
-                    <th className="px-6 py-4">Email</th>
-                    <th className="px-6 py-4">Rol</th>
-                    <th className="px-6 py-4">Fecha de registro</th>
-                    <th className="px-6 py-4 text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-surface-container-low">
-                  {(showAllUsers ? users : users.slice(0, 5)).map((u) => {
-                    const isSelf = u.id === currentUser?.id;
-
-                    return (
-                      <tr key={u.id}>
-                        <td className="px-6 py-4 font-medium">{u.name}</td>
-                        <td className="px-6 py-4 text-on-surface-variant">
-                          {u.email}
-                        </td>
-                        <td className="px-6 py-4">
-                          <span
-                            className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${
-                              u.role === "ADMIN"
-                                ? "bg-primary text-on-primary"
-                                : "bg-surface-container-high text-on-surface-variant"
-                            }`}
-                          >
-                            {u.role}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-on-surface-variant">
-                          {formatDate(u.createdAt)}
-                        </td>
-                        <td className="px-6 py-4 text-right space-x-2">
-                          <button
-                            type="button"
-                            disabled={isSelf}
-                            onClick={() => setRoleTarget(u)}
-                            className="px-3 py-1 border border-outline-variant rounded-full text-xs hover:bg-surface-container-low transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                          >
-                            Cambiar rol
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setEditError(null);
-                              setEditTarget(u);
-                            }}
-                            className="px-3 py-1 border border-outline-variant rounded-full text-xs hover:bg-surface-container-low transition-colors"
-                          >
-                            Editar
-                          </button>
-                          <button
-                            type="button"
-                            disabled={isSelf}
-                            onClick={() => setDeleteTarget(u)}
-                            className="text-error hover:bg-error-container/20 p-1 rounded-full transition-colors inline-flex align-middle disabled:opacity-30 disabled:cursor-not-allowed"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">
-                              delete
-                            </span>
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Sección de comentarios recientes (al lado de usuarios) */}
-          <section className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-col">
-            <div className="p-6 border-b border-surface-container-low">
-              <h2 className="text-xl font-bold">Comentarios recientes</h2>
-            </div>
-            <div className="p-6 flex flex-col gap-4 flex-grow">
-              {comments.length === 0 ? (
-                <p className="text-on-surface-variant text-sm text-center py-4">
-                  No hay comentarios todavía.
-                </p>
-              ) : (
-                comments.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="flex flex-col gap-2 pb-4 border-b border-surface-container-low last:border-0 last:pb-0"
+            {/* Sección de usuarios */}
+            <section className="xl:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+              <div className="p-6 flex items-center justify-between border-b border-surface-container-low">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-bold">Usuarios</h2>
+                  <span className="bg-primary/10 text-primary px-2.5 py-0.5 rounded-full text-xs font-bold">
+                    {users.length}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowAllUsers((prev) => !prev)}
+                    className="text-primary text-sm font-semibold hover:underline"
                   >
-                    <p className="text-sm text-on-surface italic line-clamp-2">
-                      "{comment.content}"
-                    </p>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold">
-                          @{comment.author?.name || "Usuario"}
-                        </span>
-                        <span className="text-[10px] text-on-surface-variant">
-                          En: {comment.post?.title || "—"}
-                        </span>
+                    {showAllUsers ? 'Ver menos' : 'Ver todos'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCreateError(null);
+                      setIsCreateModalOpen(true);
+                    }}
+                    className="px-4 py-2 bg-primary text-on-primary rounded-full text-sm font-semibold hover:bg-primary/90 transition-colors"
+                  >
+                    Nuevo usuario
+                  </button>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-surface-container-low text-on-surface-variant uppercase text-[11px] font-bold tracking-wider">
+                    <tr>
+                      <th className="px-6 py-4">Nombre</th>
+                      <th className="px-6 py-4">Email</th>
+                      <th className="px-6 py-4">Rol</th>
+                      <th className="px-6 py-4">Fecha de registro</th>
+                      <th className="px-6 py-4 text-right">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-surface-container-low">
+                    {(showAllUsers ? users : users.slice(0, 5)).map((u) => {
+                      const isSelf = u.id === currentUser?.id;
+
+                      return (
+                        <tr key={u.id}>
+                          <td className="px-6 py-4 font-medium">{u.name}</td>
+                          <td className="px-6 py-4 text-on-surface-variant">{u.email}</td>
+                          <td className="px-6 py-4">
+                            <span
+                              className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${
+                                u.role === 'ADMIN'
+                                  ? 'bg-primary text-on-primary'
+                                  : 'bg-surface-container-high text-on-surface-variant'
+                              }`}
+                            >
+                              {u.role}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-on-surface-variant">
+                            {formatDate(u.createdAt)}
+                          </td>
+                          <td className="px-6 py-4 text-right space-x-2">
+                            <button
+                              type="button"
+                              disabled={isSelf}
+                              onClick={() => setRoleTarget(u)}
+                              className="px-3 py-1 border border-outline-variant rounded-full text-xs hover:bg-surface-container-low transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              Cambiar rol
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditError(null);
+                                setEditTarget(u);
+                              }}
+                              className="px-3 py-1 border border-outline-variant rounded-full text-xs hover:bg-surface-container-low transition-colors"
+                            >
+                              Editar
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isSelf}
+                              onClick={() => setDeleteTarget(u)}
+                              className="text-error hover:bg-error-container/20 p-1 rounded-full transition-colors inline-flex align-middle disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">delete</span>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* Sección de comentarios recientes (al lado de usuarios) */}
+            <section className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-col">
+              <div className="p-6 border-b border-surface-container-low">
+                <h2 className="text-xl font-bold">Comentarios recientes</h2>
+              </div>
+              <div className="p-6 flex flex-col gap-4 flex-grow">
+                {comments.length === 0 ? (
+                  <p className="text-on-surface-variant text-sm text-center py-4">
+                    No hay comentarios todavía.
+                  </p>
+                ) : (
+                  comments.map((comment) => (
+                    <div
+                      key={comment.id}
+                      className="flex flex-col gap-2 pb-4 border-b border-surface-container-low last:border-0 last:pb-0"
+                    >
+                      <p className="text-sm text-on-surface italic line-clamp-2">
+                        "{comment.content}"
+                      </p>
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-bold">
+                            @{comment.author?.name || 'Usuario'}
+                          </span>
+                          <span className="text-[10px] text-on-surface-variant">
+                            En: {comment.post?.title || '—'}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setCommentDeleteTarget(comment)}
+                          className="text-error p-1 rounded-full hover:bg-error-container/20 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setCommentDeleteTarget(comment)}
-                        className="text-error p-1 rounded-full hover:bg-error-container/20 transition-colors"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">
-                          delete
-                        </span>
-                      </button>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </section>
+                  ))
+                )}
+              </div>
+            </section>
           </div>
 
           {/* Sección de posts recientes */}
@@ -449,7 +431,7 @@ const Admin = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-on-surface-variant">
-                        {post.author?.name || "—"}
+                        {post.author?.name || '—'}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-1">
@@ -472,9 +454,7 @@ const Admin = () => {
                           onClick={() => setPostDeleteTarget(post)}
                           className="text-error hover:bg-error-container/20 p-1 rounded-full transition-colors inline-flex align-middle"
                         >
-                          <span className="material-symbols-outlined text-[18px]">
-                            delete
-                          </span>
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
                         </button>
                       </td>
                     </tr>
@@ -491,10 +471,10 @@ const Admin = () => {
         title="Cambiar rol de usuario"
         message={
           roleTarget
-            ? `¿Estás seguro de que deseas cambiar el rol de ${roleTarget.name} de ${roleTarget.role} a ${roleTarget.role === "ADMIN" ? "USER" : "ADMIN"}?`
-            : ""
+            ? `¿Estás seguro de que deseas cambiar el rol de ${roleTarget.name} de ${roleTarget.role} a ${roleTarget.role === 'ADMIN' ? 'USER' : 'ADMIN'}?`
+            : ''
         }
-        confirmLabel={isChangingRole ? "Cambiando..." : "Cambiar rol"}
+        confirmLabel={isChangingRole ? 'Cambiando...' : 'Cambiar rol'}
         cancelLabel="Cancelar"
         onConfirm={handleConfirmRoleChange}
         onCancel={() => setRoleTarget(null)}
@@ -506,9 +486,9 @@ const Admin = () => {
         message={
           deleteTarget
             ? `¿Estás seguro de que deseas eliminar a ${deleteTarget.name}? Se eliminarán también todos sus posts y comentarios. Esta acción no se puede deshacer.`
-            : ""
+            : ''
         }
-        confirmLabel={isDeleting ? "Eliminando..." : "Eliminar"}
+        confirmLabel={isDeleting ? 'Eliminando...' : 'Eliminar'}
         cancelLabel="Cancelar"
         onConfirm={handleConfirmDelete}
         onCancel={() => setDeleteTarget(null)}
@@ -521,9 +501,9 @@ const Admin = () => {
         message={
           postDeleteTarget
             ? `¿Estás seguro de que deseas eliminar "${postDeleteTarget.title}"? Esta acción no se puede deshacer.`
-            : ""
+            : ''
         }
-        confirmLabel={isDeletingPost ? "Eliminando..." : "Eliminar"}
+        confirmLabel={isDeletingPost ? 'Eliminando...' : 'Eliminar'}
         cancelLabel="Cancelar"
         onConfirm={handleConfirmDeletePost}
         onCancel={() => setPostDeleteTarget(null)}
@@ -531,7 +511,7 @@ const Admin = () => {
       />
 
       <UserFormModal
-        key={isCreateModalOpen ? "create-open" : "create-closed"}
+        key={isCreateModalOpen ? 'create-open' : 'create-closed'}
         isOpen={isCreateModalOpen}
         mode="create"
         initialData={null}
@@ -542,7 +522,7 @@ const Admin = () => {
       />
 
       <UserFormModal
-        key={editTarget ? `edit-${editTarget.id}` : "edit-closed"}
+        key={editTarget ? `edit-${editTarget.id}` : 'edit-closed'}
         isOpen={Boolean(editTarget)}
         mode="edit"
         initialData={editTarget}
@@ -556,7 +536,7 @@ const Admin = () => {
         isOpen={Boolean(commentDeleteTarget)}
         title="Eliminar comentario"
         message="¿Estás seguro de que deseas eliminar este comentario? Esta acción no se puede deshacer."
-        confirmLabel={isDeletingComment ? "Eliminando..." : "Eliminar"}
+        confirmLabel={isDeletingComment ? 'Eliminando...' : 'Eliminar'}
         cancelLabel="Cancelar"
         onConfirm={handleConfirmDeleteComment}
         onCancel={() => setCommentDeleteTarget(null)}

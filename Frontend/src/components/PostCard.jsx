@@ -3,8 +3,8 @@
  * Se envuelve en Link para navegar al detalle (/posts/:id).
  * Click en un badge de categoria navega a /?category=slug (filtra la lista).
  */
-import { Link, useNavigate } from "react-router-dom";
-import { formatRelativeTime } from "../utils/formatRelativeTime";
+import { Link, useNavigate } from 'react-router-dom';
+import { formatRelativeTime } from '../utils/formatRelativeTime';
 
 const MAX_VISIBLE_BADGES = 3;
 /*
@@ -19,7 +19,7 @@ const formatDate = (dateString) => {
 
 const PostCard = ({ post }) => {
   const navigate = useNavigate();
-  const authorName = post.author?.name || "Autor desconocido";
+  const authorName = post.author?.name || 'Autor desconocido';
   const authorInitial = authorName.charAt(0).toUpperCase();
 
   const categories = post.categories || [];
@@ -45,9 +45,7 @@ const PostCard = ({ post }) => {
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
-            <span className="material-symbols-outlined text-5xl text-primary/30">
-              article
-            </span>
+            <span className="material-symbols-outlined text-5xl text-primary/30">article</span>
           )}
         </div>
 
@@ -61,9 +59,7 @@ const PostCard = ({ post }) => {
                 onClick={(e) => handleCategoryClick(e, cat.slug)}
                 className="inline-flex items-center px-3 py-1 bg-primary-container text-on-primary-container text-[10px] font-extrabold uppercase tracking-widest rounded-full hover:bg-primary hover:text-on-primary transition-colors"
               >
-                <span className="material-symbols-outlined text-[12px] mr-1">
-                  label
-                </span>
+                <span className="material-symbols-outlined text-[12px] mr-1">label</span>
                 {cat.name}
               </button>
             ))}
@@ -89,16 +85,12 @@ const PostCard = ({ post }) => {
               </div>
               <div>
                 <p className="text-xs font-bold">{authorName}</p>
-                <p className="text-[10px] text-outline">
-                  {formatRelativeTime(post.createdAt)}
-                </p>
+                <p className="text-[10px] text-outline">{formatRelativeTime(post.createdAt)}</p>
               </div>
             </div>
             <div className="flex items-center gap-1 text-outline">
               <span className="material-symbols-outlined text-sm">forum</span>
-              <span className="text-xs font-medium">
-                {post._count?.comments ?? 0}
-              </span>
+              <span className="text-xs font-medium">{post._count?.comments ?? 0}</span>
             </div>
           </div>
         </div>

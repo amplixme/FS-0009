@@ -131,7 +131,9 @@ const Home = () => {
       <section className="mb-16">
         <div className="relative p-6 md:p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/5 to-primary-container/10">
           <div className="relative z-10 max-w-2xl">
-            <h1 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-6 tight-tracking leading-tight">Últimas publicaciones</h1>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-6 tight-tracking leading-tight">
+              Últimas publicaciones
+            </h1>
             <SearchBar defaultValue={urlSearch} onSearch={handleSearchChange} />
           </div>
         </div>
@@ -145,7 +147,9 @@ const Home = () => {
       <div className="flex gap-12">
         {/* Sidebar Navigation Shell */}
         <aside className="w-64 hidden lg:block sticky top-24 h-fit">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-4 tight-tracking">Categorías</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-4 tight-tracking">
+            Categorías
+          </h3>
           <CategoryFilter activeCategory={urlCategory} onSelectCategory={handleSelectCategory} />
           {hasActiveFilters && (
             <button
@@ -163,7 +167,13 @@ const Home = () => {
           {loading && <Spinner size="lg" text="Cargando publicaciones..." />}
 
           {!loading && error && (
-            <ErrorMessage message={error} onRetry={() => { setError(null); setLoading(true); }} />
+            <ErrorMessage
+              message={error}
+              onRetry={() => {
+                setError(null);
+                setLoading(true);
+              }}
+            />
           )}
 
           {!loading && !error && posts.length === 0 && (
@@ -174,14 +184,8 @@ const Home = () => {
                   ? 'No se encontraron artículos para tu búsqueda.'
                   : 'Todavía no hay publicaciones.'
               }
-              actionLabel={
-                hasActiveFilters
-                  ? 'Limpiar filtros'
-                  : 'Crear primera publicación'
-              }
-              onAction={() =>
-                hasActiveFilters ? handleClearFilters() : navigate('/post')
-              }
+              actionLabel={hasActiveFilters ? 'Limpiar filtros' : 'Crear primera publicación'}
+              onAction={() => (hasActiveFilters ? handleClearFilters() : navigate('/post'))}
             />
           )}
 
@@ -190,7 +194,8 @@ const Home = () => {
               {totalPosts} {totalPosts === 1 ? 'resultado' : 'resultados'}
               {urlSearch && (
                 <>
-                  {' '}para <strong className="text-on-surface">"{urlSearch}"</strong>
+                  {' '}
+                  para <strong className="text-on-surface">"{urlSearch}"</strong>
                 </>
               )}
             </p>

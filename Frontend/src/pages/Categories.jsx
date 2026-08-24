@@ -64,7 +64,11 @@ const Categories = () => {
 
       if (modalMode === 'edit') {
         await update(editingCategory.id, data);
-        setToast({ visible: true, message: 'Categoría actualizada correctamente', type: 'success' });
+        setToast({
+          visible: true,
+          message: 'Categoría actualizada correctamente',
+          type: 'success',
+        });
       } else {
         await create(data);
         setToast({ visible: true, message: 'Categoría creada correctamente', type: 'success' });
@@ -109,9 +113,7 @@ const Categories = () => {
 
       {loading && <Spinner size="lg" text="Cargando categorías..." />}
 
-      {!loading && error && (
-        <ErrorMessage message={error} onRetry={refreshCategories} />
-      )}
+      {!loading && error && <ErrorMessage message={error} onRetry={refreshCategories} />}
 
       {!loading && !error && categories.length === 0 && (
         <EmptyState

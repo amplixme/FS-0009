@@ -10,12 +10,8 @@ const EmptyState = ({
 }) => {
   return (
     <div className="flex flex-col items-center justify-center py-24 gap-4">
-      <span className="material-symbols-outlined text-5xl text-outline mb-2">
-        {icon}
-      </span>
-      <p className="text-on-surface-variant text-center font-medium">
-        {message}
-      </p>
+      <span className="material-symbols-outlined text-5xl text-outline mb-2">{icon}</span>
+      <p className="text-on-surface-variant text-center font-medium">{message}</p>
       {actionLabel && onAction && (
         <button
           onClick={onAction}

@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { getByPostId, create, update, deleteComment } from "../services/comment.service";
-import { useAuth } from "../context/useAuth";
-import Spinner from "./common/Spinner";
-import { formatRelativeTime } from "../utils/formatRelativeTime";
-import ConfirmModal from "./common/ConfirmModal";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { getByPostId, create, update, deleteComment } from '../services/comment.service';
+import { useAuth } from '../context/useAuth';
+import Spinner from './common/Spinner';
+import { formatRelativeTime } from '../utils/formatRelativeTime';
+import ConfirmModal from './common/ConfirmModal';
 
 const CommentSection = ({ postId }) => {
   const { user, isAuthenticated } = useAuth();
@@ -13,23 +13,19 @@ const CommentSection = ({ postId }) => {
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
 
-  
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  
   const [editingId, setEditingId] = useState(null);
-  const [editingContent, setEditingContent] = useState("");
+  const [editingContent, setEditingContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const refreshComments = () => setReloadKey((prev) => prev + 1);
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!content.trim()) return;
@@ -38,7 +34,7 @@ const CommentSection = ({ postId }) => {
       setSubmitting(true);
       setSubmitError(null);
       await create(postId, content.trim());
-      setContent("");
+      setContent('');
       refreshComments();
     } catch (err) {
       setSubmitError(err.message);
@@ -64,7 +60,6 @@ const CommentSection = ({ postId }) => {
     fetchComments();
   }, [postId, reloadKey]);
 
-  
   const handleEdit = (comment) => {
     setEditingId(comment.id);
     setEditingContent(comment.content);
@@ -72,7 +67,7 @@ const CommentSection = ({ postId }) => {
 
   const handleCancelEdit = () => {
     setEditingId(null);
-    setEditingContent("");
+    setEditingContent('');
   };
 
   const handleSave = async () => {
@@ -83,7 +78,7 @@ const CommentSection = ({ postId }) => {
       setIsSaving(true);
       await update(editingId, trimmed);
       setEditingId(null);
-      setEditingContent("");
+      setEditingContent('');
       refreshComments();
     } catch (err) {
       setError(err.message);
@@ -92,7 +87,6 @@ const CommentSection = ({ postId }) => {
     }
   };
 
-  
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
@@ -130,13 +124,13 @@ const CommentSection = ({ postId }) => {
             return (
               <li key={comment.id} className="group flex gap-4">
                 <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-sm font-bold text-on-primary-fixed shrink-0">
-                  {comment.author?.name?.charAt(0).toUpperCase() || "?"}
+                  {comment.author?.name?.charAt(0).toUpperCase() || '?'}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <div className="flex items-baseline gap-2 min-w-0">
                       <span className="font-bold text-on-surface text-sm truncate">
-                        {comment.author?.name || "Usuario"}
+                        {comment.author?.name || 'Usuario'}
                       </span>
                       <span className="text-xs text-on-surface-variant">
                         {formatRelativeTime(comment.createdAt)}
@@ -149,18 +143,14 @@ const CommentSection = ({ postId }) => {
                           aria-label="Editar comentario"
                           className="text-on-surface-variant hover:text-primary transition-colors"
                         >
-                          <span className="material-symbols-outlined text-[18px]">
-                            edit
-                          </span>
+                          <span className="material-symbols-outlined text-[18px]">edit</span>
                         </button>
                         <button
                           onClick={() => setDeleteTarget(comment)}
                           aria-label="Eliminar comentario"
                           className="text-on-surface-variant hover:text-error transition-colors"
                         >
-                          <span className="material-symbols-outlined text-[18px]">
-                            delete
-                          </span>
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
                         </button>
                       </div>
                     )}
@@ -187,7 +177,7 @@ const CommentSection = ({ postId }) => {
                           disabled={isSaving || !editingContent.trim()}
                           className="px-4 py-1.5 rounded-full bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 transition-colors disabled:opacity-40"
                         >
-                          {isSaving ? "Guardando..." : "Guardar"}
+                          {isSaving ? 'Guardando...' : 'Guardar'}
                         </button>
                       </div>
                     </div>
@@ -215,18 +205,16 @@ const CommentSection = ({ postId }) => {
             rows={3}
             disabled={submitting}
             className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-sm text-on-surface placeholder:text-on-surface-variant/60 resize-none disabled:opacity-60"
-            style={{ border: "none", boxShadow: "none" }}
+            style={{ border: 'none', boxShadow: 'none' }}
           />
-          {submitError && (
-            <p className="text-error text-sm mt-2">{submitError}</p>
-          )}
+          {submitError && <p className="text-error text-sm mt-2">{submitError}</p>}
           <div className="flex justify-end mt-2">
             <button
               type="submit"
               disabled={submitting || !content.trim()}
               className="px-6 py-2 rounded-full bg-primary text-on-primary font-semibold text-sm hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submitting ? "Enviando..." : "Comentar"}
+              {submitting ? 'Enviando...' : 'Comentar'}
             </button>
           </div>
         </form>
@@ -234,7 +222,7 @@ const CommentSection = ({ postId }) => {
         <p className="text-on-surface-variant text-sm text-center mt-8 py-4 border-t border-outline-variant/20">
           <Link to="/login" className="text-primary font-semibold hover:underline">
             Inicia sesión
-          </Link>{" "}
+          </Link>{' '}
           para comentar
         </p>
       )}
@@ -243,7 +231,7 @@ const CommentSection = ({ postId }) => {
         isOpen={Boolean(deleteTarget)}
         title="Eliminar comentario"
         message="¿Estás seguro de que deseas eliminar este comentario? Esta acción no se puede deshacer."
-        confirmLabel={isDeleting ? "Eliminando..." : "Eliminar"}
+        confirmLabel={isDeleting ? 'Eliminando...' : 'Eliminar'}
         cancelLabel="Cancelar"
         onConfirm={handleDelete}
         onCancel={() => setDeleteTarget(null)}

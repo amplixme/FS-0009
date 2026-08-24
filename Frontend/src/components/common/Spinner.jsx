@@ -18,9 +18,7 @@ const Spinner = ({ size = 'md', text = 'Cargando...' }) => {
       >
         progress_activity
       </span>
-      {text && (
-        <p className="text-on-surface-variant text-sm font-medium">{text}</p>
-      )}
+      {text && <p className="text-on-surface-variant text-sm font-medium">{text}</p>}
     </div>
   );
 };

@@ -17,6 +17,8 @@ export const uploadImage = async (file, onProgress) => {
 
     return response.data.url;
   } catch (error) {
-    throw new Error(error.response?.data?.error?.message || 'Error al subir la imagen', { cause: error });
+    throw new Error(error.response?.data?.error?.message || 'Error al subir la imagen', {
+      cause: error,
+    });
   }
 };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Header from './Header'; 
-import MenuMobile from './MenuMobile'; 
+import Header from './Header';
+import MenuMobile from './MenuMobile';
 import Footer from './Footer';
 
 const Layout = ({ children }) => {
@@ -8,18 +8,12 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-background">
-
       <Header onMenuToggle={() => setIsMenuOpen((prev) => !prev)} isMenuOpen={isMenuOpen} />
 
-      <MenuMobile
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-      />
+      <MenuMobile isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
       {/* Contenido principal */}
-      <main className="pt-28">
-        {children}
-      </main>
+      <main className="pt-28">{children}</main>
 
       <Footer />
     </div>

@@ -5,9 +5,7 @@
 const ErrorMessage = ({ message = 'Ocurrió un error', onRetry }) => {
   return (
     <div className="flex flex-col items-center justify-center py-24 gap-4">
-      <span className="material-symbols-outlined text-5xl text-error mb-2">
-        error
-      </span>
+      <span className="material-symbols-outlined text-5xl text-error mb-2">error</span>
       <p className="text-error text-center font-medium">{message}</p>
       {onRetry && (
         <button

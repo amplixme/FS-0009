@@ -46,7 +46,10 @@ const MenuMobile = ({ isOpen, onClose }) => {
   return (
     <>
       {/* Overlay para cerrar al hacer clic fuera */}
-      <div className="fixed inset-0 z-40 bg-on-background/20 backdrop-blur-sm" onClick={onClose}></div>
+      <div
+        className="fixed inset-0 z-40 bg-on-background/20 backdrop-blur-sm"
+        onClick={onClose}
+      ></div>
 
       {/* Drawer Lateral */}
       <aside
@@ -67,18 +70,26 @@ const MenuMobile = ({ isOpen, onClose }) => {
                 <div className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></div>
               </div>
               <div className="min-w-0">
-                <h2 className="text-xl font-bold tracking-tight text-on-surface truncate">{user?.name}</h2>
-                <p className="text-sm text-on-surface-variant font-medium truncate">{user?.email}</p>
+                <h2 className="text-xl font-bold tracking-tight text-on-surface truncate">
+                  {user?.name}
+                </h2>
+                <p className="text-sm text-on-surface-variant font-medium truncate">
+                  {user?.email}
+                </p>
               </div>
             </>
           ) : (
             <>
               <div className="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-3xl text-on-surface-variant">person</span>
+                <span className="material-symbols-outlined text-3xl text-on-surface-variant">
+                  person
+                </span>
               </div>
               <div className="min-w-0">
                 <h2 className="text-xl font-bold tracking-tight text-on-surface">Invitado</h2>
-                <p className="text-sm text-on-surface-variant font-medium">Inicia sesión para crear contenido</p>
+                <p className="text-sm text-on-surface-variant font-medium">
+                  Inicia sesión para crear contenido
+                </p>
               </div>
             </>
           )}
@@ -86,34 +97,62 @@ const MenuMobile = ({ isOpen, onClose }) => {
 
         {/* Navegación Principal */}
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          <Link to="/" onClick={onClose} className="flex items-center gap-4 text-slate-700 dark:text-slate-300 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group">
-            <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">home</span>
+          <Link
+            to="/"
+            onClick={onClose}
+            className="flex items-center gap-4 text-slate-700 dark:text-slate-300 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group"
+          >
+            <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">
+              home
+            </span>
             <span className="font-medium">Inicio</span>
           </Link>
 
           {!isAuthenticated && (
             <>
-              <Link to="/login" onClick={onClose} className="flex items-center gap-4 text-slate-700 dark:text-slate-300 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group">
-                <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">login</span>
+              <Link
+                to="/login"
+                onClick={onClose}
+                className="flex items-center gap-4 text-slate-700 dark:text-slate-300 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group"
+              >
+                <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">
+                  login
+                </span>
                 <span className="font-medium">Iniciar sesión</span>
               </Link>
-              <Link to="/register" onClick={onClose} className="flex items-center gap-4 text-slate-700 dark:text-slate-300 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group">
-                <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">person_add</span>
+              <Link
+                to="/register"
+                onClick={onClose}
+                className="flex items-center gap-4 text-slate-700 dark:text-slate-300 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group"
+              >
+                <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">
+                  person_add
+                </span>
                 <span className="font-medium">Registrarse</span>
               </Link>
             </>
           )}
 
           {isAuthenticated && (
-            <Link to="/post" onClick={onClose} className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold rounded-lg px-4 py-3 flex items-center gap-4">
+            <Link
+              to="/post"
+              onClick={onClose}
+              className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold rounded-lg px-4 py-3 flex items-center gap-4"
+            >
               <span className="material-symbols-outlined">edit</span>
               <span>Escribir artículo</span>
             </Link>
           )}
 
           {user?.role === 'ADMIN' && (
-            <Link to="/admin" onClick={onClose} className="flex items-center gap-4 text-slate-700 dark:text-slate-300 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group">
-              <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">admin_panel_settings</span>
+            <Link
+              to="/admin"
+              onClick={onClose}
+              className="flex items-center gap-4 text-slate-700 dark:text-slate-300 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group"
+            >
+              <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">
+                admin_panel_settings
+              </span>
               <span className="font-medium">Admin</span>
             </Link>
           )}
@@ -121,11 +160,15 @@ const MenuMobile = ({ isOpen, onClose }) => {
           {/* Categorías: desde la API real */}
           <div className="mt-8 mb-4">
             <div className="flex items-center justify-between px-4 mb-4">
-              <h3 className="text-xs font-black uppercase tracking-[0.1em] text-on-surface-variant/70">Categorías</h3>
+              <h3 className="text-xs font-black uppercase tracking-[0.1em] text-on-surface-variant/70">
+                Categorías
+              </h3>
               <span className="material-symbols-outlined text-sm text-outline">category</span>
             </div>
             {categories.length === 0 ? (
-              <p className="px-4 py-3 text-sm text-on-surface-variant/60">Sin categorías disponibles</p>
+              <p className="px-4 py-3 text-sm text-on-surface-variant/60">
+                Sin categorías disponibles
+              </p>
             ) : (
               <ul className="space-y-1">
                 {categories.map((cat) => (

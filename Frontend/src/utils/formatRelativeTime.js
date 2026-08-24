@@ -1,6 +1,6 @@
 /**
  * Formatea una fecha a tiempo relativo amigable para el usuario.
- * @param {string | Date} dateInput 
+ * @param {string | Date} dateInput
  * @returns {string}
  */
 export const formatRelativeTime = (dateInput) => {
