@@ -6,7 +6,11 @@ const SORT_OPTIONS = [
 
 const SortSelector = ({ value = 'newest', onChange, className = '' }) => {
   return (
-    <div className={`flex flex-wrap items-center gap-2 ${className}`} role="group" aria-label="Ordenar publicaciones">
+    <div
+      className={`flex flex-wrap items-center gap-2 ${className}`}
+      role="group"
+      aria-label="Ordenar publicaciones"
+    >
       {SORT_OPTIONS.map((option) => (
         <button
           key={option.value}

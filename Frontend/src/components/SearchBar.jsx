@@ -8,9 +8,12 @@ const useDebouncedCallback = (callback, delay) => {
     callbackRef.current = callback;
   }, [callback]);
 
-  useEffect(() => () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    },
+    []
+  );
 
   const debounced = useCallback(
     (...args) => {
@@ -35,7 +38,10 @@ const SearchBar = ({
   className = '',
 }) => {
   const [value, setValue] = useState(defaultValue);
-  const { debounced: debouncedSearch, cancel: cancelSearch } = useDebouncedCallback(onSearch, delay);
+  const { debounced: debouncedSearch, cancel: cancelSearch } = useDebouncedCallback(
+    onSearch,
+    delay
+  );
 
   // Sincroniza el input cuando defaultValue cambia desde fuera (URL, limpiar filtros)
   const [prevDefault, setPrevDefault] = useState(defaultValue);
@@ -58,7 +64,9 @@ const SearchBar = ({
 
   return (
     <div className={`relative flex items-center ${className}`}>
-      <span className="material-symbols-outlined absolute left-4 text-outline pointer-events-none">search</span>
+      <span className="material-symbols-outlined absolute left-4 text-outline pointer-events-none">
+        search
+      </span>
       <input
         type="text"
         value={value}

@@ -2,10 +2,10 @@
  * Página de creación de un post.
  * Usa PostForm como componente reutilizable.
  */
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { create } from "../services/post.service";
-import PostForm from "../components/PostForm";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { create } from '../services/post.service';
+import PostForm from '../components/PostForm';
 
 export default function Post() {
   const navigate = useNavigate();

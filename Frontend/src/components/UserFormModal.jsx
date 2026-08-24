@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmitting, error }) => {
-  const [name, setName] = useState(initialData?.name || "");
-  const [email, setEmail] = useState(initialData?.email || "");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState(initialData?.role || "USER");
+  const [name, setName] = useState(initialData?.name || '');
+  const [email, setEmail] = useState(initialData?.email || '');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState(initialData?.role || 'USER');
 
   useEffect(() => {
     if (!isOpen) return;
@@ -24,7 +24,7 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = { name, email, role };
-    if (mode === "create") {
+    if (mode === 'create') {
       data.password = password;
     }
     onSubmit(data);
@@ -41,7 +41,7 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
         {/* Header */}
         <div className="flex items-center justify-between px-8 py-6 border-b border-outline-variant/20">
           <h2 id="user-modal-title" className="text-xl font-bold text-on-surface">
-            {mode === "create" ? "Crear nuevo usuario" : "Editar usuario"}
+            {mode === 'create' ? 'Crear nuevo usuario' : 'Editar usuario'}
           </h2>
           <button
             type="button"
@@ -84,7 +84,7 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
             />
           </div>
 
-          {mode === "create" && (
+          {mode === 'create' && (
             <div>
               <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">
                 Contraseña
@@ -113,8 +113,8 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
                     type="radio"
                     name="role"
                     value="USER"
-                    checked={role === "USER"}
-                    onChange={() => setRole("USER")}
+                    checked={role === 'USER'}
+                    onChange={() => setRole('USER')}
                     disabled={isSubmitting}
                     className="peer appearance-none w-5 h-5 border-2 border-outline-variant rounded-full checked:border-primary transition-all"
                   />
@@ -130,8 +130,8 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
                     type="radio"
                     name="role"
                     value="ADMIN"
-                    checked={role === "ADMIN"}
-                    onChange={() => setRole("ADMIN")}
+                    checked={role === 'ADMIN'}
+                    onChange={() => setRole('ADMIN')}
                     disabled={isSubmitting}
                     className="peer appearance-none w-5 h-5 border-2 border-outline-variant rounded-full checked:border-primary transition-all"
                   />
@@ -162,12 +162,12 @@ const UserFormModal = ({ isOpen, mode, initialData, onSubmit, onCancel, isSubmit
               className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-primary text-on-primary font-semibold hover:bg-primary/90 transition-all disabled:opacity-60"
             >
               {isSubmitting
-                ? mode === "create"
-                  ? "Creando..."
-                  : "Guardando..."
-                : mode === "create"
-                ? "Crear usuario"
-                : "Guardar cambios"}
+                ? mode === 'create'
+                  ? 'Creando...'
+                  : 'Guardando...'
+                : mode === 'create'
+                  ? 'Crear usuario'
+                  : 'Guardar cambios'}
             </button>
           </div>
         </form>

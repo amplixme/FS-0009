@@ -26,9 +26,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       start = totalPages - 3;
     }
 
-    if (start > 2) pages.push("...");
+    if (start > 2) pages.push('...');
     for (let i = start; i <= end; i++) pages.push(i);
-    if (end < totalPages - 1) pages.push("...");
+    if (end < totalPages - 1) pages.push('...');
 
     pages.push(totalPages);
 
@@ -50,7 +50,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       </button>
 
       {pageNumbers.map((page, index) =>
-        page === "..." ? (
+        page === '...' ? (
           <span key={`ellipsis-${index}`} className="px-2 text-outline">
             ...
           </span>
@@ -60,11 +60,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             type="button"
             onClick={() => onPageChange(page)}
             aria-label={`Página ${page}`}
-            aria-current={page === currentPage ? "page" : undefined}
+            aria-current={page === currentPage ? 'page' : undefined}
             className={
               page === currentPage
-                ? "w-10 h-10 rounded-lg bg-primary text-on-primary font-bold shadow-md"
-                : "w-10 h-10 rounded-lg text-on-surface hover:bg-surface-container-low transition-colors"
+                ? 'w-10 h-10 rounded-lg bg-primary text-on-primary font-bold shadow-md'
+                : 'w-10 h-10 rounded-lg text-on-surface hover:bg-surface-container-low transition-colors'
             }
           >
             {page}
