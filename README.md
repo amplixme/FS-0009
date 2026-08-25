@@ -139,7 +139,7 @@ pnpm run preview  # servir el build localmente
 pnpm run lint     # ESLint
 ```
 
-# URL Frotend en Vercel
+# URL Frontend en Vercel
 
 ```bash
 https://fs-0009-front.vercel.app/
