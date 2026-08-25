@@ -158,6 +158,84 @@ cd BackEnd && pnpm audit
 cd Frontend && pnpm audit
 ```
 
+# Documentación de la API
+
+## 🔐 Autenticación
+
+| Método | Endpoint | Descripción | Datos de entrada | Datos de salida | Errores conocidos |
+|--------|----------|-------------|------------------|-----------------|-------------------|
+| `GET` | `/api/health` | Retorna status OK | N/A | `{ status: 'ok' }` | N/A |
+| `POST` | `/api/auth/register` | Registro de usuario | `nombre`, `email`, `contraseña` | Usuario registrado exitosamente | El nombre es requerido / El email es requerido / La contraseña es requerida |
+| `POST` | `/api/auth/login` | Login de usuario | `email`, `contraseña` | `Token`, `User` | El email es requerido / La contraseña es requerida / `401`: Credenciales inválidas |
+
+---
+
+## 📝 Posts
+
+| Método | Endpoint | Descripción | Datos de entrada | Datos de salida | Errores conocidos |
+|--------|----------|-------------|------------------|-----------------|-------------------|
+| `GET` | `/api/posts` | Devuelve todos los posts creados | N/A | `id`, `title`, `content`, `coverImage`, `published`, `createdAt`, `updatedAt`, `author: {id, name}`, `categories: [{id, name, slug}]`, `count: comments`, `total`, `page`, `totalPages` | N/A |
+| `GET` | `/api/posts/:id` | Devuelve los datos del post por ID | `id` (parámetro) | `id`, `title`, `content`, `coverImage`, `published`, `createdAt`, `updatedAt`, `author: {name}`, `categories: [{id, name, slug}]` | `{ "message": "Post no encontrado" }` |
+| `POST` | `/api/posts` | Creación de post | `title`, `content`, `coverImage`, `published`, `categoryIds`, `authorId` | `title`, `content`, `coverImage`, `authorId`, `published`, `categoryIds` | El título es requerido / El contenido es requerido / URL de imagen inválida |
+| `PUT` | `/api/posts/:id` | Actualizar datos del post | `id`, `title`, `content`, `coverImage`, `published`, `categoryIds` | `id`, `title`, `content`, `coverImage`, `published`, `categoryIds` | El título no puede estar vacío / El contenido no puede estar vacío / URL de imagen inválida / `404`: Post no encontrado / `403`: No tienes permiso para modificar este post |
+| `DELETE` | `/api/posts/:id` | Eliminar un post | `id` | `{ message: 'Post eliminado correctamente' }` | `404`: Post no encontrado / `403`: No tienes permiso para modificar este post |
+
+---
+
+## 🗂️ Categorías
+
+| Método | Endpoint | Descripción | Datos de entrada | Datos de salida | Errores conocidos |
+|--------|----------|-------------|------------------|-----------------|-------------------|
+| `GET` | `/api/categories` | Devuelve todas las categorías | N/A | `id`, `name`, `slug` | N/A |
+| `POST` | `/api/categories` | Creación de categoría *(requiere rol admin)* | `name`, `slug` | `name`, `slug` | El nombre es requerido / El slug es requerido / `400`: error prisma / `409`: Ya existe una categoría con ese nombre o slug |
+| `PUT` | `/api/categories` | Actualizar datos de categoría *(requiere rol admin)* | `id`, `name`, `slug` | `id`, `name`, `slug` | El nombre no puede estar vacío / El slug no puede estar vacío / `400`: error prisma / `404`: Categoría no encontrada / `409`: Ya existe una categoría con ese nombre o slug |
+| `DELETE` | `/api/categories/:id` | Eliminar una categoría por ID *(requiere rol admin)* | `id` | `{ message: "Categoría eliminada correctamente" }` | `404`: Categoría no encontrada / `409`: No se puede eliminar una categoría con posts asociados |
+
+---
+
+## 🖼️ Imágenes
+
+| Método | Endpoint | Descripción | Datos de entrada | Datos de salida | Errores conocidos |
+|--------|----------|-------------|------------------|-----------------|-------------------|
+| `POST` | `/api/upload` | Subida de imagen | `req.file` (con multer) | `URL` | `400`: No se envió ninguna imagen |
+
+---
+
+## 💬 Comentarios
+
+| Método | Endpoint | Descripción | Datos de entrada | Datos de salida | Errores conocidos |
+|--------|----------|-------------|------------------|-----------------|-------------------|
+| `POST` | `/api/posts/:postId/comments` | Creación de comentario en un post | `content`, `postId`, `authorId` | `autor`, `comentario` | `404`: Post no encontrado / El contenido es requerido |
+| `GET` | `/api/posts/:postId/comments` | Devuelve todos los comentarios del post | `postId` | `id`, `content`, `authorId`, `createdAt`, `updateAt`, `author: { name }` | `404`: `{ message: 'Post no encontrado' }` |
+| `PUT` | `/api/comments/:id` | Actualizar un comentario por ID | `id`, `content` | `id`, `content`, `createdAt`, `updateAt`, `authorId`, `author: { name }` | `403`: `{ message: 'No autorizado' }` / `404`: `{ message: 'Comentario no encontrado' }` |
+| `DELETE` | `/api/comments/:id` | Eliminar un comentario *(requiere ser autor o ADMIN)* | `id` | `{ message: 'Comentario eliminado correctamente' }` | `403`: `{ message: 'No autorizado' }` / `404`: `{ message: 'Comentario no encontrado' }` |
+
+---
+
+## 👤 Usuarios
+
+| Método | Endpoint | Descripción | Datos de entrada | Datos de salida | Errores conocidos |
+|--------|----------|-------------|------------------|-----------------|-------------------|
+| `GET` | `/api/users/:id` | Recuperar datos públicos de un usuario | `id` | `id`, `name`, `bio`, `avatarUrl`, `createdAt`, `postsCount` | `404`: Usuario no encontrado |
+| `PUT` | `/api/users/me` | Actualizar datos del usuario *(ruta protegida)* | `name`, `bio`, `avatarUrl` | `{ message: "Perfil actualizado correctamente", user: updatedUser }` | — |
+
+---
+
+## 🛡️ Admin
+
+| Método | Endpoint | Descripción | Datos de entrada | Datos de salida | Errores conocidos |
+|--------|----------|-------------|------------------|-----------------|-------------------|
+| `GET` | `/api/admin/stats` | Devuelve estadísticas generales | N/A | `totalUsers`, `totalPosts`, `totalComments`, `postToday`, `postByCategory` | N/A |
+| `GET` | `/api/admin/users` | Devuelve todos los usuarios | N/A | `id`, `name`, `email`, `role`, `createdAt`, `postCount` | N/A |
+| `POST` | `/api/admin/users` | Crear un usuario | `name`, `email`, `password`, `role` | `id`, `name`, `email`, `role`, `createdAt` | `409`: Ya existe un usuario con ese email |
+| `PATCH` | `/api/admin/users/:id/role` | Actualizar rol del usuario (USER ↔ ADMIN) | `id` | `id`, `name`, `email`, `role`, `createdAt` | `403`: No podés cambiar tu propio rol |
+| `PATCH` | `/api/admin/users/:id` | Actualizar datos del usuario por ID | `id`, `name`, `email`, `role` | `id`, `name`, `email`, `role`, `createdAt` | `409`: Ya existe un usuario con ese email |
+| `DELETE` | `/api/admin/users/:id` | Eliminar un usuario por ID | `id` | `{ message: "Usuario eliminado correctamente" }` | `403`: No podés eliminar tu propia cuenta |
+| `DELETE` | `/api/admin/posts/:id` | Eliminar un post por ID | `id` | `{ message: "Post eliminado correctamente" }` | N/A |
+| `GET` | `/api/admin/comments` | Devuelve todos los comentarios | N/A | `id`, `content`, `createAt`, `author: { name }`, `post: { id, title }` | N/A |
+| `DELETE` | `/api/admin/comments/:id` | Eliminar un comentario por ID | `id` | `{ message: "Comentario eliminado correctamente" }` | N/A |
+
+
 # Estructura del proyecto
 
 ```
