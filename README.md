@@ -139,6 +139,12 @@ pnpm run preview  # servir el build localmente
 pnpm run lint     # ESLint
 ```
 
+# URL Frontend en Vercel
+
+```bash
+https://fs-0009-front.vercel.app/
+```
+
 # Seguridad y Hardening contra Supply-Chain Attacks
 
 Este proyecto usa **pnpm** con medidas de defensa contra ataques de supply-chain estilo Shai-Hulud (worm de NPM):

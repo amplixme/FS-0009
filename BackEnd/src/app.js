@@ -5,9 +5,10 @@ import router from './routes/index.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || `http://localhost:5173`
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin:CORS_ORIGIN}));
 
 app.use('/api', router); 
 
